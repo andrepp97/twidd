@@ -19,6 +19,8 @@ const Home: NextPage = () => {
 
             {/* Feeds */}
             <TweetBox />
+            <TweetBox />
+            <TweetBox />
         </div>
     )
 }
