@@ -1,24 +1,73 @@
-import type { NextPage } from 'next'
+import { useEffect, useState } from 'react'
+import { getProviders, getSession, useSession } from 'next-auth/react'
 import { RefreshIcon } from '@heroicons/react/outline'
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { db } from '../lib/firebase'
+import Post from '../components/post'
+import Login from '../components/login'
 import TweetBox from '../components/tweetBox'
 
-const Home: NextPage = () => {
+export async function getServerSideProps(context: any) {
+    const trendingResults = await fetch("https://jsonkeeper.com/b/NKEV")
+        .then(res => res.json())
+    const followResults = await fetch("https://jsonkeeper.com/b/WWMJ")
+        .then(res => res.json())
+    const session = await getSession(context)
+    const providers = await getProviders()
+
+    return {
+        props: {
+            trendingResults,
+            followResults,
+            providers,
+            session,
+        },
+    }
+}
+
+interface HomeProps {
+    trendingResults: ArrayLike<string>
+    followResults: ArrayLike<string>
+    providers: {}
+}
+
+const Home = ({ trendingResults, followResults, providers }: HomeProps) => {
+    // Hooks
+    const { data: session } = useSession()
+    const [posts, setPosts] = useState<Array<{ id: string, data: any }>>([])
+
+    // Lifecycle
+    useEffect(() => {
+        return onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snapshopt: any) => setPosts(snapshopt.docs))
+    }, [db])
+
+    // Render
+    if (!session) return <Login providers={providers} />
     return (
         <div>
-            {/* Header */}
-            <div className='text-zinc-100 flex items-center justify-between pr-2 mt-2 overflow-auto'>
-                <h1 className='text-xl font-semibold p-4'>
+
+            <div className='text-zinc-100 flex items-center justify-between overflow-auto my-3 px-4'>
+                <h1 className='text-xl font-semibold'>
                     Home
                 </h1>
-                <button className='rounded-full hover:bg-embed p-2 group'>
+                <button className='rounded-full hover:bg-embed p-1 group'>
                     <RefreshIcon
-                        className='w-6 h-6 cursor-pointer transition-all duration-300 ease-out group-hover:rotate-180 group-hover:text-zinc-100 group-active:scale-125'
+                        className='w-5 h-5 cursor-pointer transition-all duration-300 ease-out group-hover:rotate-180 group-hover:text-zinc-100 group-active:scale-125'
                     />
                 </button>
             </div>
 
-            {/* Feeds */}
             <TweetBox />
+
+            {posts?.map(post => (
+                <Post
+                    id={post.id}
+                    key={post.id}
+                    post={post.data()}
+                    postPage={undefined}
+                />
+            ))}
+
         </div>
     )
 }
