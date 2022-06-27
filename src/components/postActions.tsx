@@ -33,7 +33,7 @@ const PostActions = (props: ActionsProps) => {
 
     // Render
     return (
-        <div className="flex items-center justify-between w-full sm:w-8/12 text-gray-400">
+        <div className="flex items-center justify-between w-full sm:w-8/12 text-gray-400 mx-auto">
 
             <div
                 onClick={e => onClickComment(e)}
@@ -50,7 +50,7 @@ const PostActions = (props: ActionsProps) => {
             </div>
 
             <div
-                onClick={e => onClickComment(e)}
+                onClick={e => e.stopPropagation()}
                 className="flex items-center group"
             >
                 {
@@ -89,13 +89,16 @@ const PostActions = (props: ActionsProps) => {
                         )
                 }
                 {likes.length > 0 && (
-                    <small className="text-pink-600">
+                    <small className={`group-hover:text-pink-600 ${liked && "text-pink-600"}`}>
                         {likes.length}
                     </small>
                 )}
             </div>
 
-            <div className="group iconButton">
+            <div
+                onClick={e => e.stopPropagation()}
+                className="group iconButton"
+            >
                 <ShareIcon className="icon" />
             </div>
 
