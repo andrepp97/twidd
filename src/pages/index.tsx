@@ -5,6 +5,7 @@ import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 import Post from '../components/post'
 import Login from '../components/login'
+import Spinner from '../components/spinner'
 import TweetBox from '../components/tweetBox'
 
 export async function getServerSideProps(context: any) {
@@ -34,7 +35,7 @@ interface HomeProps {
 const Home = ({ trendingResults, followResults, providers }: HomeProps) => {
     // Hooks
     const { data: session } = useSession()
-    const [posts, setPosts] = useState<Array<{ id: string, data: any }>>([])
+    const [posts, setPosts] = useState<Array<{ id: string, data: any }> | null>(null)
 
     // Lifecycle
     useEffect(() => {
@@ -59,14 +60,18 @@ const Home = ({ trendingResults, followResults, providers }: HomeProps) => {
 
             <TweetBox />
 
-            {posts?.map(post => (
-                <Post
-                    id={post.id}
-                    key={post.id}
-                    post={post.data()}
-                    postPage={undefined}
-                />
-            ))}
+            {
+                posts
+                    ? posts.map(post => (
+                        <Post
+                            id={post.id}
+                            key={post.id}
+                            post={post.data()}
+                            postPage={undefined}
+                        />
+                    ))
+                    : <Spinner />
+            }
 
         </div>
     )
