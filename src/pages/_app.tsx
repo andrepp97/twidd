@@ -4,6 +4,7 @@ import { SessionProvider } from 'next-auth/react'
 import { RecoilRoot } from 'recoil'
 import Main from '../layout/main'
 import '../styles/globals.css'
+import 'emoji-mart/css/emoji-mart.css'
 
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
     return (
