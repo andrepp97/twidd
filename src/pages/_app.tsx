@@ -1,10 +1,11 @@
+import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
-import Head from 'next/head'
+import { RecoilRoot } from 'recoil'
 import Main from '../layout/main'
 import '../styles/globals.css'
 
-const MyApp = ({ Component, pageProps: {session, ...pageProps} }: AppProps) => {
+const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
     return (
         <div className='bg-zinc-900'>
             <Head>
@@ -12,9 +13,11 @@ const MyApp = ({ Component, pageProps: {session, ...pageProps} }: AppProps) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <SessionProvider session={session}>
-                <Main>
-                    <Component {...pageProps} />
-                </Main>
+                <RecoilRoot>
+                    <Main>
+                        <Component {...pageProps} />
+                    </Main>
+                </RecoilRoot>
             </SessionProvider>
         </div>
     )
