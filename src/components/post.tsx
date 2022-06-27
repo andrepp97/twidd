@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react"
 import { DotsHorizontalIcon } from "@heroicons/react/outline"
 import { useRecoilState } from "recoil"
 import { modalState, postIdState } from "../atoms/modalAtom"
-import { collection, deleteDoc, doc, onSnapshot, setDoc } from "firebase/firestore"
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query, setDoc } from "firebase/firestore"
 import { db } from "../lib/firebase"
 import PostActions from "./postActions"
 
@@ -44,13 +44,14 @@ const Post = ({ id, post, postPage }: PostProps) => {
     const deletePost = (e: { stopPropagation: () => void }) => {
         e.stopPropagation()
         const isDelete = confirm("Delete This Post ?").valueOf()
-        if (isDelete) deleteDoc(doc(db, "posts", id))
-        router.push("/")
+        if (isDelete) {
+            deleteDoc(doc(db, "posts", id))
+            router.push("/")
+        }
     }
 
     const likePost = async (e: { stopPropagation: () => void }) => {
         e.stopPropagation()
-
         if (liked) {
             await deleteDoc(doc(db, "posts", id, "likes", session.user.uid))
         } else {
@@ -62,6 +63,16 @@ const Post = ({ id, post, postPage }: PostProps) => {
 
     // Lifecycle
     useEffect(() => {
+        return onSnapshot(
+            query(
+                collection(db, "posts", id, "comments"),
+                orderBy("timestamp", "desc")
+            ),
+            (snapshot) => setComments(snapshot.docs)
+        )
+    }, [db, id])
+
+    useEffect(() => {
         return onSnapshot(collection(db, "posts", id, "likes"), (snapshot => setLikes(snapshot.docs)))
     }, [db, id])
 
@@ -72,11 +83,11 @@ const Post = ({ id, post, postPage }: PostProps) => {
     // Render
     return (
         <div
-            onClick={() => router.push(`/${id}`)}
+            onClick={() => !postPage && router.push(`/${id}`)}
             className="flex cursor-pointer border-b border-gray-700 hover:bg-neutral-800 p-4"
         >
 
-            {!postPage && (
+            {!postPage && post?.userImg && (
                 <div className="min-w-fit">
                     <Image
                         className="rounded-full"
@@ -92,14 +103,16 @@ const Post = ({ id, post, postPage }: PostProps) => {
 
                 <div className={`flex mb-2 ${!postPage && "justify-between"}`}>
 
-                    {postPage && (
-                        <Image
-                            className="rounded-full"
-                            src={post?.userImg}
-                            height={44}
-                            width={44}
-                            alt=""
-                        />
+                    {postPage && post?.userImg && (
+                        <div className="w-fit">
+                            <Image
+                                className="rounded-full"
+                                src={post?.userImg}
+                                height={44}
+                                width={44}
+                                alt=""
+                            />
+                        </div>
                     )}
 
                     <div className="text-zinc-300 w-full ml-2">
@@ -131,9 +144,9 @@ const Post = ({ id, post, postPage }: PostProps) => {
                             {post?.text}
                         </p>
 
-                        {post.image && (
+                        {post?.image && (
                             <img
-                                className="rounded-lg object-cover w-full max-h-96 mt-2"
+                                className={`rounded-lg object-cover mt-2 w-full ${postPage ? "h-fit" : "max-h-96"}`}
                                 src={post.image}
                                 alt=""
                             />
