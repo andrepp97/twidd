@@ -56,7 +56,7 @@ const PostPage = ({ providers }: any) => {
 
             <Head>
                 <title>
-                    {post?.username} on Tweetme: "{post?.text}"
+                    {post?.username} on Twitme: "{post?.text}"
                 </title>
             </Head>
 

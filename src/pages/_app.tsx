@@ -10,7 +10,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
     return (
         <div className='bg-zinc-900'>
             <Head>
-                <title>Tweetme</title>
+                <title>Twitme</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <SessionProvider session={session}>
