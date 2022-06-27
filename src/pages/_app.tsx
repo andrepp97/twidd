@@ -11,7 +11,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
         <div className='bg-zinc-900'>
             <Head>
                 <title>Twitme</title>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/favicon.png" />
             </Head>
             <SessionProvider session={session}>
                 <RecoilRoot>
