@@ -22,7 +22,6 @@ import {
 import Spinner from './spinner'
 import { db, storage } from "../lib/firebase"
 import { Picker } from "emoji-mart"
-import "emoji-mart/css/emoji-mart.css"
 
 const TweetBox = () => {
     // Hooks
