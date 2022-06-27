@@ -6,12 +6,19 @@ import Main from '../layout/main'
 import '../styles/globals.css'
 import 'emoji-mart/css/emoji-mart.css'
 
+const meta = {
+    keywords: "twitter, social, media, tweet, twitme, chat, nextjs, react, tailwind, css, firebase",
+    description: "Share your opinion, because you can.",
+}
+
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
     return (
         <div className='bg-zinc-900'>
             <Head>
-                <title>Twitme</title>
+                <title>Home / Twitme</title>
                 <link rel="icon" href="/favicon.png" />
+                <meta name="keywords" content={meta.keywords} />
+                <meta name="description" content={meta.description} />
             </Head>
             <SessionProvider session={session}>
                 <RecoilRoot>
