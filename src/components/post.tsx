@@ -1,19 +1,20 @@
 import Image from "next/image"
+import Moment from "react-moment"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
 import { useSession } from "next-auth/react"
-import {
-    DotsHorizontalIcon,
-    ChatIcon,
-    ShareIcon,
-    TrashIcon,
-    SwitchHorizontalIcon,
-    HeartIcon as HeartOutlineIcon,
-} from "@heroicons/react/outline"
-import { HeartIcon as HeartSolidICon } from "@heroicons/react/solid"
+import { DotsHorizontalIcon } from "@heroicons/react/outline"
+import { useRecoilState } from "recoil"
+import { modalState, postIdState } from "../atoms/modalAtom"
+import { collection, deleteDoc, doc, onSnapshot, setDoc } from "firebase/firestore"
+import { db } from "../lib/firebase"
+import PostActions from "./postActions"
 
 interface PostProps {
     id: string
     postPage: any
     post: {
+        id: string,
         username: string,
         userImg: string,
         image: string,
@@ -25,11 +26,55 @@ interface PostProps {
 
 const Post = ({ id, post, postPage }: PostProps) => {
     // Hooks
-    const { data: session } = useSession()
+    const router = useRouter()
+    const { data: session }: any = useSession()
+    const [isOpen, setIsOpen] = useRecoilState(modalState)
+    const [postId, setPostId] = useRecoilState(postIdState)
+    const [comments, setComments] = useState<Array<any>>([])
+    const [likes, setLikes] = useState<Array<any>>([])
+    const [liked, setLiked] = useState<boolean>(false)
+
+    // Function
+    const onClickComment = (e: { stopPropagation: () => void }) => {
+        e.stopPropagation()
+        setPostId(id)
+        setIsOpen(true)
+    }
+
+    const deletePost = (e: { stopPropagation: () => void }) => {
+        e.stopPropagation()
+        const isDelete = confirm("Delete This Post ?").valueOf()
+        if (isDelete) deleteDoc(doc(db, "posts", id))
+        router.push("/")
+    }
+
+    const likePost = async (e: { stopPropagation: () => void }) => {
+        e.stopPropagation()
+
+        if (liked) {
+            await deleteDoc(doc(db, "posts", id, "likes", session.user.uid))
+        } else {
+            await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
+                username: session.user.name
+            })
+        }
+    }
+
+    // Lifecycle
+    useEffect(() => {
+        return onSnapshot(collection(db, "posts", id, "likes"), (snapshot => setLikes(snapshot.docs)))
+    }, [db, id])
+
+    useEffect(() => {
+        return setLiked(likes.findIndex(like => like.id == session?.user?.uid) !== -1)
+    }, [likes])
 
     // Render
     return (
-        <div className="flex cursor-pointer border-b border-gray-700 hover:bg-neutral-800 p-4">
+        <div
+            onClick={() => router.push(`/${id}`)}
+            className="flex cursor-pointer border-b border-gray-700 hover:bg-neutral-800 p-4"
+        >
 
             {!postPage && (
                 <div className="min-w-fit">
@@ -45,7 +90,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
 
             <div className="flex flex-col space-y-2 w-full">
 
-                <div className={`flex ${!postPage && "justify-between"}`}>
+                <div className={`flex mb-2 ${!postPage && "justify-between"}`}>
 
                     {postPage && (
                         <Image
@@ -68,13 +113,16 @@ const Post = ({ id, post, postPage }: PostProps) => {
                                     @{post?.tag}
                                 </small>
                                 <span className="text-gray-300 mx-1">·</span>
-                                <small className="hover:underline">
-                                    {/* <Moment fromNow> */}
-                                    {/* {post?.timestamp?.toDate()} */}
-                                    {/* </Moment> */}
+                                <small className="text-gray-400 hover:underline">
+                                    <Moment fromNow>
+                                        {post?.timestamp?.toDate()}
+                                    </Moment>
                                 </small>
                             </div>
-                            <div className="group hidden sm:inline text-gray-300 flex-shrink-0 ml-auto">
+                            <div
+                                onClick={(e) => e.stopPropagation()}
+                                className="group hidden sm:inline text-gray-300 flex-shrink-0 ml-auto"
+                            >
                                 <DotsHorizontalIcon className="h-5 group-hover:text-[#1D9BF0]" />
                             </div>
                         </div>
@@ -85,7 +133,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
 
                         {post.image && (
                             <img
-                                className="rounded-lg object-cover w-full max-h-96 my-2"
+                                className="rounded-lg object-cover w-full max-h-96 mt-2"
                                 src={post.image}
                                 alt=""
                             />
@@ -95,20 +143,16 @@ const Post = ({ id, post, postPage }: PostProps) => {
 
                 </div>
 
-                <div className="flex items-center justify-between w-full sm:w-8/12 text-gray-400">
-                    <div className="group iconButton">
-                        <ChatIcon className="icon" />
-                    </div>
-                    <div className="group iconButton">
-                        <SwitchHorizontalIcon className="icon" />
-                    </div>
-                    <div className="group iconButton">
-                        <HeartOutlineIcon className="icon" />
-                    </div>
-                    <div className="group iconButton">
-                        <ShareIcon className="icon" />
-                    </div>
-                </div>
+                <PostActions
+                    id={post?.id}
+                    session={session}
+                    comments={comments}
+                    onClickComment={onClickComment}
+                    deletePost={deletePost}
+                    likePost={likePost}
+                    likes={likes}
+                    liked={liked}
+                />
 
             </div>
 
