@@ -83,7 +83,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
     // Render
     return (
         <div
-            onClick={() => !postPage && router.push(`/${id}`)}
+            onClick={() => !postPage && router.push(`/post/${id}`)}
             className="flex cursor-pointer border-b border-gray-700 hover:bg-neutral-800 p-4"
         >
 
