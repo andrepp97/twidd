@@ -52,7 +52,7 @@ const Home = ({ providers }: any) => {
 
             <TweetBox />
 
-            {isOpen && <Modal /> }
+            {isOpen && <Modal />}
 
             {
                 posts
