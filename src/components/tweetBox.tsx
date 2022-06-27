@@ -155,6 +155,7 @@ const TweetBox = () => {
                                                     marginLeft: "-3rem",
                                                     marginTop: "2rem",
                                                     maxWidth: "270px",
+                                                    zIndex: 2,
                                                     borderRadius: "1rem",
                                                 }}
                                             />
