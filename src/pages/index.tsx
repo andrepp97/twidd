@@ -1,40 +1,32 @@
 import { useEffect, useState } from 'react'
-import { getProviders, getSession, useSession } from 'next-auth/react'
 import { RefreshIcon } from '@heroicons/react/outline'
+import { getProviders, getSession, useSession } from 'next-auth/react'
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { db } from '../lib/firebase'
+import { useRecoilValue } from 'recoil'
+import { modalState } from '../atoms/modalAtom'
 import Post from '../components/post'
 import Login from '../components/login'
 import Spinner from '../components/spinner'
 import TweetBox from '../components/tweetBox'
+import Modal from '../components/modal'
 
 export async function getServerSideProps(context: any) {
-    const trendingResults = await fetch("https://jsonkeeper.com/b/NKEV")
-        .then(res => res.json())
-    const followResults = await fetch("https://jsonkeeper.com/b/WWMJ")
-        .then(res => res.json())
     const session = await getSession(context)
     const providers = await getProviders()
 
     return {
         props: {
-            trendingResults,
-            followResults,
             providers,
             session,
         },
     }
 }
 
-interface HomeProps {
-    trendingResults: ArrayLike<string>
-    followResults: ArrayLike<string>
-    providers: {}
-}
-
-const Home = ({ trendingResults, followResults, providers }: HomeProps) => {
+const Home = ({ providers }: any) => {
     // Hooks
     const { data: session } = useSession()
+    const isOpen = useRecoilValue(modalState)
     const [posts, setPosts] = useState<Array<{ id: string, data: any }> | null>(null)
 
     // Lifecycle
@@ -59,6 +51,8 @@ const Home = ({ trendingResults, followResults, providers }: HomeProps) => {
             </div>
 
             <TweetBox />
+
+            {isOpen && <Modal /> }
 
             {
                 posts
