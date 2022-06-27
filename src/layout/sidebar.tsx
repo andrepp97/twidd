@@ -12,7 +12,7 @@ import {
 } from '@heroicons/react/outline'
 import TwitterIcon from '../../public/twitter.png'
 import SidebarItem from '../components/sidebarItem'
-import UserProfile from '../components/userProfile'
+import UserProfile from '../components/userInfo'
 
 const sidebarItems = [
     {
