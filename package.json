@@ -10,6 +10,7 @@
     "emoji-mart": "^3.0.1",
     "emoji-picker-react": "^3.5.1",
     "firebase": "^9.8.4",
+    "moment": "^2.29.3",
     "next": "latest",
     "next-auth": "^4.6.1",
     "react": "18.1.0",
