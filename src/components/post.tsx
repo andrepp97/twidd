@@ -38,7 +38,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
     const onClickComment = (e: { stopPropagation: () => void }) => {
         e.stopPropagation()
         setPostId(id)
-        setIsOpen(true)
+        setIsOpen("comment")
     }
 
     const deletePost = (e: { stopPropagation: () => void }) => {
