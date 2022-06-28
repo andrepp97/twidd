@@ -1,13 +1,14 @@
 import Image from "next/image"
 import { useState } from "react"
 import { signIn } from "next-auth/react"
-import Logo from "../../public/twitter.png"
 import GoogleIcon from "../../public/google.png"
+import Logo from "../../public/twitter.png"
+import Spinner from "./spinner"
 
 interface ProviderProps {
     providers: {
-        id?: any
-        name?: any
+        id: any
+        name: any
     }
 }
 
@@ -44,9 +45,15 @@ const Login = ({ providers }: ProviderProps) => {
                         width={40}
                         alt=""
                     />
-                    <span>
-                        Login With {provider.name}
-                    </span>
+                    {
+                        loading
+                            ? <Spinner />
+                            : (
+                                <span>
+                                    Login With {provider.name}
+                                </span>
+                            )
+                    }
                 </button>
             ))}
         </div>
