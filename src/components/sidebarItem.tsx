@@ -15,8 +15,8 @@ const SidebarItem = ({ Icon, title, path }: SidebarProps) => {
     // Render
     return (
         <Link href={path} passHref={true}>
-            <div className={`text-gray-300 flex items-center justify-center sm:justify-start space-x-2 px-3 sm:px-6 py-3 cursor-pointer rounded-full hover:text-zinc-100 hover:bg-zinc-700 transition-all duration-200 ${pathname == path && 'bg-zinc-700 text-zinc-100 font-semibold'}`}>
-                <Icon className='w-5 sm:w-6 h-5 sm:h-6' />
+            <div className={`text-gray-300 flex items-center justify-center sm:justify-start gap-x-2 px-2 sm:px-6 py-2 sm:py-3 cursor-pointer rounded-full hover:text-zinc-100 hover:bg-zinc-700 transition-all duration-200 ${pathname == path && 'bg-zinc-700 text-zinc-100 font-semibold'}`}>
+                <Icon className='w-6 h-6' />
                 <p className='hidden md:inline-flex lg:text-lg'>
                     {title}
                 </p>

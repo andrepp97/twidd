@@ -7,7 +7,6 @@ import {
     HashtagIcon,
     BellIcon,
     MailIcon,
-    UserIcon,
     PencilIcon,
 } from '@heroicons/react/outline'
 import { useRecoilState } from 'recoil'
@@ -39,11 +38,6 @@ const sidebarItems = [
         icon: MailIcon,
         path: "/messages",
     },
-    {
-        title: "Profile",
-        icon: UserIcon,
-        path: "/profile",
-    },
 ]
 
 const Sidebar = () => {
@@ -60,20 +54,32 @@ const Sidebar = () => {
 
     // Render
     return (
-        <aside className='min-h-screen min-w-fit flex flex-col justify-between border-r border-zinc-700 space-y-2 px-1 md:px-6 py-5'>
+        <aside className='absolute sm:relative bottom-0 sm:min-h-screen w-full sm:w-fit min-w-fit flex items-center flex-row-reverse sm:flex-col justify-between border-t sm:border-r border-zinc-700 bg-zinc-900 p-2 md:px-6 sm:py-5 z-10'>
 
-            <div>
-                <Link href={"/"} passHref={true}>
-                    <div className='w-full flex justify-center sm:justify-start sm:ml-6 mb-6'>
+            <div className='sm:hidden'>
+                <button
+                    onClick={() => setIsOpen("tweet")}
+                    className='text-zinc-100 bg-[#1D9BF0] hover:bg-[#1A8CD8] transition-all duration-200 rounded-full p-2'
+                >
+                    <PencilIcon className='w-6 h-6' />
+                </button>
+            </div>
+
+            <div className='flex items-center sm:inline m-0'>
+                <div className='hidden sm:flex justify-center sm:justify-start sm:ml-6 mb-6'>
+                    <Link
+                        href={"/"}
+                        passHref={true}
+                    >
                         <Image
                             className='text-gray-300 cursor-pointer'
                             src={TwitterIcon}
                             height={22}
                             width={28}
                         />
-                    </div>
-                </Link>
-                <div className='space-y-1 my-6'>
+                    </Link>
+                </div>
+                <div className='flex items-center sm:block gap-x-2 sm:space-y-1 sm:my-6'>
                     {sidebarItems.map((item, index) => (
                         <SidebarItem
                             key={index}
@@ -85,10 +91,10 @@ const Sidebar = () => {
                 </div>
                 <button
                     onClick={() => setIsOpen("tweet")}
-                    className='text-zinc-100 bg-[#1D9BF0] hover:bg-[#1A8CD8] transition-all duration-200 p-2 rounded-full font-semibold tracking-wide w-fit md:w-full flex items-center justify-center mx-auto'
+                    className='text-zinc-100 bg-[#1D9BF0] hover:bg-[#1A8CD8] transition-all duration-200 p-2 rounded-full font-semibold tracking-wide w-fit md:w-full hidden sm:flex items-center justify-center h-fit mx-auto'
                 >
                     <p className='hidden md:inline'>Tweet</p>
-                    <PencilIcon className='w-5 h-5 md:hidden' />
+                    <PencilIcon className='w-6 h-6 md:hidden' />
                 </button>
             </div>
 

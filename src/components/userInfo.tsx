@@ -10,8 +10,8 @@ interface ProfileProps {
 
 const UserInfo = ({ open, openMenu, session, signout }: ProfileProps) => {
     return (
-        <div className='relative py-4'>
-            <div className={`absolute top-[-48px] bg-embed w-full h-fit p-1 rounded shadow shadow-zinc-500 transition-all duration-200 opacity-0 ${open && "opacity-100"}`}>
+        <div className='relative'>
+            <div className={`absolute top-[-60px] bg-embed w-fit sm:w-full h-fit p-1 rounded shadow shadow-zinc-500 transition-all duration-200 opacity-0 ${open && "opacity-100"}`}>
                 <button
                     onClick={() => signout()}
                     className='w-full tracking-wide text-zinc-100 hover:bg-gray-700 rounded p-2'

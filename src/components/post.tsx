@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Moment from "react-moment"
+import Linkify from "linkify-react"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useSession } from "next-auth/react"
@@ -141,7 +142,20 @@ const Post = ({ id, post, postPage }: PostProps) => {
                         </div>
 
                         <p className="text-sm md:text-base mt-1">
-                            {post?.text}
+                            <Linkify
+                                options={{
+                                    className: "text-blue-500 hover:underline",
+                                    ignoreTags: [],
+                                    nl2br: false,
+                                    rel: null,
+                                    tagName: "a",
+                                    target: "_blank",
+                                    truncate: 0,
+                                    validate: true
+                                }}
+                            >
+                                {post?.text}
+                            </Linkify>
                         </p>
 
                         {post?.image && (

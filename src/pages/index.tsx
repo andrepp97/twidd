@@ -61,8 +61,8 @@ const Home = ({ providers }: any) => {
     // Render
     if (!session) return <Login providers={providers} />
     return (
-        <div ref={homeRef}>
-            <div className='text-zinc-100 bg-zinc-900 bg-opacity-95 flex items-center justify-between sticky top-0 p-4 z-10'>
+        <div ref={homeRef} className='pb-14'>
+            <div className='text-zinc-100 bg-zinc-900 bg-opacity-95 flex items-center justify-between sticky top-0 px-4 py-2 sm:py-4 z-10'>
                 <h1 className='text-xl font-semibold'>
                     Home
                 </h1>
@@ -76,7 +76,9 @@ const Home = ({ providers }: any) => {
                 </button>
             </div>
 
-            <TweetBox />
+            <div className='hidden sm:inline'>
+                <TweetBox />
+            </div>
 
             {isOpen === "comment" && (
                 <Modal>
