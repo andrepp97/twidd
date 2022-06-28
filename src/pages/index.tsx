@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { RefreshIcon } from '@heroicons/react/outline'
 import { getProviders, getSession, useSession } from 'next-auth/react'
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
@@ -8,6 +8,7 @@ import { modalState } from '../atoms/modalAtom'
 import Post from '../components/post'
 import Login from '../components/login'
 import Spinner from '../components/spinner'
+import CommentBox from '../components/commentBox'
 import TweetBox from '../components/tweetBox'
 import Modal from '../components/modal'
 
@@ -25,25 +26,50 @@ export async function getServerSideProps(context: any) {
 
 const Home = ({ providers }: any) => {
     // Hooks
+    const homeRef = useRef<any>()
     const { data: session } = useSession()
     const isOpen = useRecoilValue(modalState)
+    const [refresh, setRefresh] = useState(false)
     const [posts, setPosts] = useState<Array<{ id: string, data: any }> | null>(null)
+
+    // Function
+    const getPosts = () => {
+        onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snapshopt: any) => setPosts(snapshopt.docs))
+    }
+
+    const executeScroll = () => {
+        if (!refresh) {
+            try {
+                homeRef.current.scrollIntoView({ behavior: "smooth" })
+                setRefresh(true)
+                getPosts()
+            } catch (error) {
+                console.log(error)
+            } finally {
+                setTimeout(() => {
+                    setRefresh(false)
+                }, 1000)
+            }
+        }
+    }
 
     // Lifecycle
     useEffect(() => {
-        return onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snapshopt: any) => setPosts(snapshopt.docs))
+        return getPosts()
     }, [db])
 
     // Render
     if (!session) return <Login providers={providers} />
     return (
-        <div>
-
-            <div className='text-zinc-100 flex items-center justify-between overflow-auto my-3 px-4'>
+        <div ref={homeRef}>
+            <div className='text-zinc-100 bg-zinc-900 bg-opacity-95 flex items-center justify-between sticky top-0 p-4 z-10'>
                 <h1 className='text-xl font-semibold'>
                     Home
                 </h1>
-                <button className='rounded-full hover:bg-embed p-1 group'>
+                <button
+                    onClick={executeScroll}
+                    className='rounded-full hover:bg-embed p-1 group disabled:opacity-50'
+                >
                     <RefreshIcon
                         className='w-5 h-5 cursor-pointer transition-all duration-300 ease-out group-hover:rotate-180 group-hover:text-zinc-100 group-active:scale-125'
                     />
@@ -52,7 +78,13 @@ const Home = ({ providers }: any) => {
 
             <TweetBox />
 
-            {isOpen && <Modal />}
+            {isOpen === "comment" && (
+                <Modal>
+                    <CommentBox />
+                </Modal>
+            )}
+
+            {refresh && <div className='py-4'><Spinner /></div>}
 
             {
                 posts
@@ -64,9 +96,8 @@ const Home = ({ providers }: any) => {
                             postPage={undefined}
                         />
                     ))
-                    : <Spinner />
+                    : <div className='py-4'><Spinner /></div>
             }
-
         </div>
     )
 }
