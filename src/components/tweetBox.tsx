@@ -22,11 +22,14 @@ import {
 import Spinner from './spinner'
 import { db, storage } from "../lib/firebase"
 import { Picker } from "emoji-mart"
+import { useRecoilState } from 'recoil'
+import { modalState } from '../atoms/modalAtom'
 
 const TweetBox = () => {
     // Hooks
     const { data: session }: any = useSession()
     const filePickerRef = useRef<HTMLInputElement>(null)
+    const [isOpen, setIsOpen] = useRecoilState(modalState)
     const [tweet, setTweet] = useState<string>("")
     const [image, setImage] = useState<any>(null)
     const [loading, setLoading] = useState<boolean>(false)
@@ -79,6 +82,7 @@ const TweetBox = () => {
             setShowEmoji(false)
             setImage(null)
             setTweet("")
+            setIsOpen("")
         }
     }
 
