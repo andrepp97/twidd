@@ -10,8 +10,8 @@ interface ProfileProps {
 
 const UserInfo = ({ open, openMenu, session, signout }: ProfileProps) => {
     return (
-        <div className='relative'>
-            <div className={`absolute top-[-4rem] bg-embed w-full h-fit p-2 rounded shadow shadow-zinc-500 transition-all duration-200 opacity-0 ${open && "opacity-100"}`}>
+        <div className='relative py-4'>
+            <div className={`absolute top-[-48px] bg-embed w-full h-fit p-1 rounded shadow shadow-zinc-500 transition-all duration-200 opacity-0 ${open && "opacity-100"}`}>
                 <button
                     onClick={() => signout()}
                     className='w-full tracking-wide text-zinc-100 hover:bg-gray-700 rounded p-2'
@@ -24,13 +24,13 @@ const UserInfo = ({ open, openMenu, session, signout }: ProfileProps) => {
             </div>
             <div
                 onClick={() => openMenu()}
-                className='flex items-center rounded-full cursor-pointer w-fit p-2 mx-auto hover:bg-embed'
+                className='flex items-center rounded-full cursor-pointer w-fit sm:p-2 mx-auto hover:bg-embed'
             >
                 <Image
                     src={session?.user?.image || ""}
                     className='rounded-full'
-                    height={42}
-                    width={42}
+                    height={40}
+                    width={40}
                     alt=""
                 />
                 <div className='hidden md:inline leading-5 mr-4 ml-2'>
