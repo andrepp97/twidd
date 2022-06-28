@@ -10,9 +10,13 @@ import {
     UserIcon,
     PencilIcon,
 } from '@heroicons/react/outline'
+import { useRecoilState } from 'recoil'
+import { modalState } from '../atoms/modalAtom'
 import TwitterIcon from '../../public/twitter.png'
 import SidebarItem from '../components/sidebarItem'
 import UserProfile from '../components/userInfo'
+import TweetBox from '../components/tweetBox'
+import Modal from '../components/modal'
 
 const sidebarItems = [
     {
@@ -46,6 +50,7 @@ const Sidebar = () => {
     // Hooks
     const { data: session }: any = useSession()
     const [open, setOpen] = useState(false)
+    const [isOpen, setIsOpen] = useRecoilState(modalState)
 
     // Function
     const userSignout = () => {
@@ -79,7 +84,8 @@ const Sidebar = () => {
                     ))}
                 </div>
                 <button
-                    className='text-zinc-100 bg-[#1D9BF0] hover:bg-[#1A8CD8] transition-all duration-200 p-3 rounded-full font-semibold tracking-wide w-fit md:w-full flex items-center justify-center mx-auto'
+                    onClick={() => setIsOpen("tweet")}
+                    className='text-zinc-100 bg-[#1D9BF0] hover:bg-[#1A8CD8] transition-all duration-200 p-2 rounded-full font-semibold tracking-wide w-fit md:w-full flex items-center justify-center mx-auto'
                 >
                     <p className='hidden md:inline'>Tweet</p>
                     <PencilIcon className='w-5 h-5 md:hidden' />
@@ -92,6 +98,12 @@ const Sidebar = () => {
                 signout={userSignout}
                 openMenu={() => setOpen(prev => !prev)}
             />
+
+            {isOpen === "tweet" && (
+                <Modal>
+                    <TweetBox />
+                </Modal>
+            )}
 
         </aside>
     );
