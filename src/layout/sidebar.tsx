@@ -54,7 +54,7 @@ const Sidebar = () => {
 
     // Render
     return (
-        <aside className='absolute sm:relative bottom-0 sm:min-h-screen w-full sm:w-fit min-w-fit flex items-center flex-row-reverse sm:flex-col justify-between border-t sm:border-r border-zinc-700 bg-zinc-900 p-2 md:px-6 sm:py-5 z-10'>
+        <aside className='fixed sm:relative bottom-0 sm:min-h-screen w-full sm:w-fit min-w-max sm:min-w-fit flex items-center flex-row-reverse sm:flex-col justify-between border-t sm:border-r border-zinc-700 bg-zinc-900 gap-x-2 p-3 md:px-6 sm:py-5 z-10'>
 
             <div className='sm:hidden'>
                 <button
