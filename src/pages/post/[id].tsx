@@ -59,7 +59,7 @@ const PostPage = ({ providers }: any) => {
     return !session
         ? <Login providers={providers} />
         : (
-            <div className="min-h-screen">
+            <div>
 
                 <Head>
                     <title>
