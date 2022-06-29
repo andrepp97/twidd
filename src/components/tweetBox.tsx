@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import {
@@ -27,6 +28,7 @@ import { modalState } from '../atoms/modalAtom'
 
 const TweetBox = () => {
     // Hooks
+    const router = useRouter()
     const { data: session }: any = useSession()
     const filePickerRef = useRef<HTMLInputElement>(null)
     const [isOpen, setIsOpen] = useRecoilState(modalState)
@@ -83,6 +85,7 @@ const TweetBox = () => {
             setImage(null)
             setTweet("")
             setIsOpen("")
+            router.push("/")
         }
     }
 
