@@ -110,8 +110,9 @@ const TweetBox = () => {
                         rows={3}
                         value={tweet}
                         onChange={e => setTweet(e.target.value)}
-                        className="text-zinc-100 outline-none rounded-lg border-zinc-700 border bg-transparent tracking-wide min-h-[48px] p-2"
+                        disabled={loading}
                         placeholder="What's Happening ?"
+                        className="text-zinc-100 outline-none rounded-lg border-zinc-700 border bg-transparent tracking-wide min-h-[48px] p-2"
                     />
 
                     {image && (
