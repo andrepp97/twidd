@@ -31,6 +31,8 @@ const PostActions = (props: ActionsProps) => {
         liked,
     } = props
 
+    // console.log(commented)
+
     // Render
     return (
         <div className="flex items-center justify-between w-full sm:w-8/12 text-gray-400 mx-auto">
@@ -40,10 +42,10 @@ const PostActions = (props: ActionsProps) => {
                 className="flex items-center space-x-1 group"
             >
                 <div className="group iconButton">
-                    <ChatIcon className="icon" />
+                    <ChatIcon className="icon group-hover:text-blue-400" />
                 </div>
                 {comments.length > 0 && (
-                    <small className="group-hover:text-zinc-100">
+                    <small className="group-hover:text-blue-400">
                         {comments.length}
                     </small>
                 )}
