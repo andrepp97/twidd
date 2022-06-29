@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Moment from "react-moment"
 import Linkify from "linkify-react"
+import Zoom from "react-medium-image-zoom"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useSession } from "next-auth/react"
@@ -12,7 +13,7 @@ import { db } from "../lib/firebase"
 import PostActions from "./postActions"
 
 const linkifyOptions = {
-    className: "text-blue-500 hover:underline",
+    className: "text-blue-500 hover:underline break-all",
     rel: "noopener noreferrer",
     target: "_blank",
     validate: true,
@@ -170,17 +171,19 @@ const Post = ({ id, post, postPage }: PostProps) => {
 
                 {postPage && (
                     <div className="text-zinc-300 mt-2">
-                        <p className="text-sm md:text-base">
+                        <p className="text-sm md:text-base mb-2">
                             <Linkify options={linkifyOptions}>
                                 {post?.text}
                             </Linkify>
                         </p>
                         {post?.image && (
-                            <img
-                                className={`rounded-lg object-cover mt-2 w-full ${postPage ? "h-fit" : "max-h-96"}`}
-                                src={post.image}
-                                alt=""
-                            />
+                            <Zoom>
+                                <img
+                                    className={`rounded-lg object-cover w-full ${postPage ? "h-fit" : "max-h-96"}`}
+                                    src={post.image}
+                                    alt=""
+                                />
+                            </Zoom>
                         )}
                     </div>
                 )}
