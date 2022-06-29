@@ -50,6 +50,7 @@ const CommentBox = () => {
             await addDoc(collection(db, "posts", postId, "comments"), {
                 comment: comment,
                 tag: session.user.tag,
+                userId: session.user.uid,
                 userImg: session.user.image,
                 username: session.user.name,
                 timestamp: serverTimestamp(),
@@ -125,7 +126,7 @@ const CommentBox = () => {
 
                         {
                             loading
-                                ? <Spinner />
+                                ? <div className="flex py-2"><Spinner /></div>
                                 : (
                                     <div className="flex items-center justify-between py-2">
                                         <div className="relative flex items-center space-x-2 text-gray-300">
