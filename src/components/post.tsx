@@ -11,6 +11,14 @@ import { collection, deleteDoc, doc, onSnapshot, orderBy, query, setDoc } from "
 import { db } from "../lib/firebase"
 import PostActions from "./postActions"
 
+const linkifyOptions = {
+    className: "text-blue-500 hover:underline",
+    rel: "noopener noreferrer",
+    target: "_blank",
+    validate: true,
+    truncate: 0,
+}
+
 interface PostProps {
     id: string
     postPage: any
@@ -117,7 +125,6 @@ const Post = ({ id, post, postPage }: PostProps) => {
                     )}
 
                     <div className="text-zinc-300 w-full ml-2">
-
                         <div className="w-full flex items-center justify-between">
                             <div className="inline-block group">
                                 <p className={`text-[14px] lg:text-sm font-semibold group-hover:underline ${!postPage && "inline-block"}`}>
@@ -141,23 +148,33 @@ const Post = ({ id, post, postPage }: PostProps) => {
                             </div>
                         </div>
 
-                        <p className="text-sm md:text-base mt-1">
-                            <Linkify
-                                options={{
-                                    className: "text-blue-500 hover:underline",
-                                    ignoreTags: [],
-                                    nl2br: false,
-                                    rel: null,
-                                    tagName: "a",
-                                    target: "_blank",
-                                    truncate: 0,
-                                    validate: true
-                                }}
-                            >
+                        {!postPage && (
+                            <div className="mt-2">
+                                <p className="text-sm md:text-base">
+                                    <Linkify options={linkifyOptions}>
+                                        {post?.text}
+                                    </Linkify>
+                                </p>
+                                {post?.image && (
+                                    <img
+                                        className={`rounded-lg object-cover mt-2 w-full ${postPage ? "h-fit" : "max-h-96"}`}
+                                        src={post.image}
+                                        alt=""
+                                    />
+                                )}
+                            </div>
+                        )}
+                    </div>
+
+                </div>
+
+                {postPage && (
+                    <div className="text-zinc-300 mt-2">
+                        <p className="text-sm md:text-base">
+                            <Linkify options={linkifyOptions}>
                                 {post?.text}
                             </Linkify>
                         </p>
-
                         {post?.image && (
                             <img
                                 className={`rounded-lg object-cover mt-2 w-full ${postPage ? "h-fit" : "max-h-96"}`}
@@ -165,10 +182,8 @@ const Post = ({ id, post, postPage }: PostProps) => {
                                 alt=""
                             />
                         )}
-
                     </div>
-
-                </div>
+                )}
 
                 <PostActions
                     id={post?.id}
