@@ -15,6 +15,7 @@ import {
 } from "@firebase/firestore"
 import { db } from "../lib/firebase"
 import { modalState, postIdState } from "../atoms/modalAtom"
+import Spinner from "./spinner"
 
 const CommentBox = () => {
     // Hooks
@@ -24,6 +25,7 @@ const CommentBox = () => {
     const [isOpen, setIsOpen] = useRecoilState(modalState)
     const [post, setPost] = useState<any>()
     const [comment, setComment] = useState<string>("")
+    const [loading, setLoading] = useState<boolean>(false)
     const [showEmoji, setShowEmoji] = useState<boolean>(false)
 
     // Lifecycle
@@ -42,17 +44,24 @@ const CommentBox = () => {
 
     const sendComment = async (e: { preventDefault: () => void }) => {
         e.preventDefault()
-        await addDoc(collection(db, "posts", postId, "comments"), {
-            comment: comment,
-            tag: session.user.tag,
-            userImg: session.user.image,
-            username: session.user.name,
-            timestamp: serverTimestamp(),
-        })
 
-        setIsOpen("")
-        setComment("")
-        router.push(`/post/${postId}`)
+        try {
+            setLoading(true)
+            await addDoc(collection(db, "posts", postId, "comments"), {
+                comment: comment,
+                tag: session.user.tag,
+                userImg: session.user.image,
+                username: session.user.name,
+                timestamp: serverTimestamp(),
+            })
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsOpen("")
+            setComment("")
+            setLoading(false)
+            router.push(`/post/${postId}`)
+        }
     }
 
     // Render
@@ -109,43 +118,50 @@ const CommentBox = () => {
                             rows={2}
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
+                            disabled={loading}
                             placeholder="Tweet your reply"
                             className="bg-transparent outline-none border border-zinc-700 rounded-lg text-[#d9d9d9] tracking-wide w-full min-h-[80px] p-2"
                         />
 
-                        <div className="flex items-center justify-between py-2">
-                            <div className="relative flex items-center space-x-2 text-gray-300">
-                                <div
-                                    className="hidden sm:inline"
-                                    onClick={() => setShowEmoji(prev => !prev)}
-                                >
-                                    <EmojiHappyIcon
-                                        className="h-5 w-5 cursor-pointer hover:text-zinc-100"
-                                    />
-                                </div>
-                                {showEmoji && (
-                                    <Picker
-                                        theme="dark"
-                                        onSelect={onEmojiClick}
-                                        style={{
-                                            position: "absolute",
-                                            zIndex: 2,
-                                            top: 0,
-                                            left: "1rem",
-                                            maxWidth: "270px",
-                                            borderRadius: "1rem",
-                                        }}
-                                    />
-                                )}
-                            </div>
-                            <button
-                                className="bg-[#1d9bf0] text-white rounded-full px-4 py-1.5 font-bold shadow-md hover:bg-[#1a8cd8] disabled:hover:bg-[#1d9bf0] disabled:opacity-50 disabled:cursor-default"
-                                disabled={!comment.trim()}
-                                onClick={sendComment}
-                            >
-                                Reply
-                            </button>
-                        </div>
+                        {
+                            loading
+                                ? <Spinner />
+                                : (
+                                    <div className="flex items-center justify-between py-2">
+                                        <div className="relative flex items-center space-x-2 text-gray-300">
+                                            <div
+                                                className="hidden sm:inline"
+                                                onClick={() => setShowEmoji(prev => !prev)}
+                                            >
+                                                <EmojiHappyIcon
+                                                    className="h-5 w-5 cursor-pointer hover:text-zinc-100"
+                                                />
+                                            </div>
+                                            {showEmoji && (
+                                                <Picker
+                                                    theme="dark"
+                                                    onSelect={onEmojiClick}
+                                                    style={{
+                                                        position: "absolute",
+                                                        zIndex: 2,
+                                                        top: 0,
+                                                        left: "1rem",
+                                                        maxWidth: "270px",
+                                                        borderRadius: "1rem",
+                                                    }}
+                                                />
+                                            )}
+                                        </div>
+                                        <button
+                                            className="bg-[#1d9bf0] text-white rounded-full px-4 py-1.5 font-bold shadow-md hover:bg-[#1a8cd8] disabled:hover:bg-[#1d9bf0] disabled:opacity-50 disabled:cursor-default"
+                                            disabled={!comment.trim()}
+                                            onClick={sendComment}
+                                        >
+                                            Reply
+                                        </button>
+                                    </div>
+                                )
+                        }
                     </div>
                 </div>
 
