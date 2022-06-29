@@ -1,6 +1,7 @@
-import { useSession } from "next-auth/react";
-import Sidebar from "./sidebar";
-import Widgets from "./widgets";
+import { useSession } from "next-auth/react"
+import Sidebar from "./sidebar"
+import Widgets from "./widgets"
+import Footer from "./footer"
 
 interface LayoutProps {
     children: React.ReactNode
@@ -18,6 +19,7 @@ const Main = ({ children }: LayoutProps) => {
                 <main className='grid grid-cols-6 w-full max-h-screen overflow-y-hidden'>
                     <div className={`col-span-6 ${session && "lg:col-span-4"} overflow-auto`}>
                         {children}
+                        <Footer />
                     </div>
                     {session && <Widgets />}
                 </main>
