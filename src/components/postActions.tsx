@@ -13,6 +13,7 @@ interface ActionsProps {
     comments: Array<any>
     onClickComment: Function
     deletePost: Function
+    sharePost: Function
     likePost: Function
     likes: Array<any>
     liked: boolean
@@ -26,12 +27,11 @@ const PostActions = (props: ActionsProps) => {
         comments,
         onClickComment,
         deletePost,
+        sharePost,
         likePost,
         likes,
         liked,
     } = props
-
-    // console.log(commented)
 
     // Render
     return (
@@ -98,7 +98,7 @@ const PostActions = (props: ActionsProps) => {
             </div>
 
             <div
-                onClick={e => e.stopPropagation()}
+                onClick={e => sharePost(e)}
                 className="group iconButton"
             >
                 <ShareIcon className="icon" />

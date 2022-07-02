@@ -11,6 +11,7 @@ import { modalState, postIdState } from "../atoms/modalAtom"
 import { collection, deleteDoc, doc, onSnapshot, orderBy, query, setDoc } from "firebase/firestore"
 import { db } from "../lib/firebase"
 import PostActions from "./postActions"
+import SharePost from "./sharePost"
 
 const linkifyOptions = {
     className: "text-blue-500 hover:underline break-all",
@@ -43,6 +44,8 @@ const Post = ({ id, post, postPage }: PostProps) => {
     const [comments, setComments] = useState<Array<any>>([])
     const [likes, setLikes] = useState<Array<any>>([])
     const [liked, setLiked] = useState<boolean>(false)
+    const [share, setShare] = useState<boolean>(false)
+    const [copied, setCopied] = useState<boolean>(false)
 
     // Function
     const onClickComment = (e: { stopPropagation: () => void }) => {
@@ -69,6 +72,17 @@ const Post = ({ id, post, postPage }: PostProps) => {
                 username: session.user.name
             })
         }
+    }
+
+    const sharePost = (e: { stopPropagation: () => void }) => {
+        e.stopPropagation()
+        setShare(prev => !prev)
+        setCopied(false)
+    }
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(`https://twitme.netlify.app/post/${id}`)
+        setCopied(true)
     }
 
     // Lifecycle
@@ -109,7 +123,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
                 </div>
             )}
 
-            <div className="flex flex-col space-y-2 w-full">
+            <div className="flex flex-col space-y-2 w-full relative">
 
                 <div className={`flex mb-2 ${!postPage && "justify-between"}`}>
 
@@ -194,12 +208,33 @@ const Post = ({ id, post, postPage }: PostProps) => {
                     comments={comments}
                     onClickComment={onClickComment}
                     deletePost={deletePost}
+                    sharePost={sharePost}
                     likePost={likePost}
                     likes={likes}
                     liked={liked}
                 />
 
+                {share && (
+                    <div
+                        onClick={e => e.stopPropagation()}
+                        className="absolute right-0 bottom-10 z-10 bg-zinc-700 bg-opacity-95 rounded-lg max-w-xs space-y-4 p-4"
+                    >
+                        <SharePost url={`https://twitme.netlify.app/post/${id}`} />
+                        <div className="flex items-center gap-1 text-gray-300 w-auto">
+                            <p className="overflow-auto text-sm rounded-sm border border-gray-400 p-1">
+                                {`https://twitme.netlify.app/post/${id}`}
+                            </p>
+                            <button
+                                onClick={copyToClipboard}
+                                className={`${copied ? "bg-zinc-900" : "bg-embed"} rounded-sm px-2 py-1`}
+                            >
+                                {copied ? "Copied!" : "Copy"}
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
+
 
         </div>
     );

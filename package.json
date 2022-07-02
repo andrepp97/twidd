@@ -14,6 +14,7 @@
     "moment": "^2.29.3",
     "next": "latest",
     "next-auth": "^4.6.1",
+    "next-share": "^0.14.0",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-medium-image-zoom": "^4.4.3",
