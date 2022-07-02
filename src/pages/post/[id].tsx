@@ -86,8 +86,8 @@ const PostPage = ({ providers }: any) => {
 
                     {comments.length > 0 && (
                         <div className="pb-60">
-                            <p className="text-zinc-300 border-gray-700 border-b px-6 py-4">
-                                Comments
+                            <p className="text-zinc-300 font-semibold border-gray-700 border-b px-6 py-4">
+                                Replies
                             </p>
                             {comments.map((comment) => (
                                 <Comment
