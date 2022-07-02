@@ -13,8 +13,9 @@ const Footer = () => {
                     &nbsp;- Andre Putera Pratama
                 </p>
             </div>
-            <div className="space-x-4 mt-4">
+            <div className="flex items-center justify-center gap-x-2 mt-2">
                 <a
+                    className="hover:bg-embed rounded-full flex items-center justify-center h-12 w-12"
                     href="https://www.linkedin.com/in/andreputera"
                     rel="noopener noreferrer"
                     target="_blank"
@@ -27,6 +28,7 @@ const Footer = () => {
                     />
                 </a>
                 <a
+                    className="hover:bg-embed rounded-full flex items-center justify-center h-12 w-12"
                     href="https://github.com/andrepp97/tweetme"
                     rel="noopener noreferrer"
                     target="_blank"

@@ -29,14 +29,14 @@ const sidebarItems = [
         path: "/explore",
     },
     {
-        title: "Notifications",
-        icon: BellIcon,
-        path: "/notifications",
-    },
-    {
         title: "Messages",
         icon: MailIcon,
         path: "/messages",
+    },
+    {
+        title: "Notifications",
+        icon: BellIcon,
+        path: "/notifications",
     },
 ]
 
