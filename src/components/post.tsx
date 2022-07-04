@@ -108,7 +108,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
     return (
         <div
             onClick={() => !postPage && router.push(`/post/${id}`)}
-            className="flex cursor-pointer border-b border-gray-700 hover:bg-neutral-800 p-4"
+            className={`${!postPage && "cursor-pointer"} flex border-b border-gray-700 hover:bg-neutral-800 p-4`}
         >
 
             {!postPage && post?.userImg && (
@@ -165,7 +165,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
 
                         {!postPage && (
                             <div className="mt-2">
-                                <p className="text-sm md:text-base">
+                                <p className="text-sm md:text-base w-fit">
                                     <Linkify options={linkifyOptions}>
                                         {post?.text}
                                     </Linkify>
@@ -217,7 +217,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
                 {share && (
                     <div
                         onClick={e => e.stopPropagation()}
-                        className="absolute right-0 bottom-10 z-10 bg-zinc-700 bg-opacity-95 rounded-lg max-w-xs space-y-4 p-4"
+                        className="absolute right-0 bottom-10 z-10 bg-zinc-700 bg-opacity-95 rounded-lg max-w-xs space-y-3 p-3"
                     >
                         <SharePost url={`https://twitme.netlify.app/post/${id}`} />
                         <div className="flex items-center gap-1 text-gray-300 w-auto">
