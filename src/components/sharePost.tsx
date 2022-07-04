@@ -5,6 +5,8 @@ import {
     WhatsappShareButton,
     TwitterIcon,
     TwitterShareButton,
+    TelegramIcon,
+    TelegramShareButton,
 } from "next-share"
 
 interface ShareProps {
@@ -20,6 +22,9 @@ const SharePost = ({ url }: ShareProps) => {
             <TwitterShareButton url={url} onClick={e => e.stopPropagation()}>
                 <TwitterIcon round size={36} />
             </TwitterShareButton>
+            <TelegramShareButton url={url} onClick={e => e.stopPropagation()}>
+                <TelegramIcon round size={36} />
+            </TelegramShareButton>
             <WhatsappShareButton url={url} onClick={e => e.stopPropagation()}>
                 <WhatsappIcon round size={36} />
             </WhatsappShareButton>
