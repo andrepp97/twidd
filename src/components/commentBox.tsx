@@ -130,10 +130,7 @@ const CommentBox = () => {
                                 : (
                                     <div className="flex items-center justify-between py-2">
                                         <div className="relative flex items-center space-x-2 text-gray-300">
-                                            <div
-                                                className="hidden sm:inline"
-                                                onClick={() => setShowEmoji(prev => !prev)}
-                                            >
+                                            <div onClick={() => setShowEmoji(prev => !prev)}>
                                                 <EmojiHappyIcon
                                                     className="h-5 w-5 cursor-pointer hover:text-zinc-100"
                                                 />
