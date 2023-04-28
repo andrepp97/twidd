@@ -76,6 +76,7 @@ const Sidebar = () => {
                             src={TwitterIcon}
                             height={22}
                             width={28}
+                            alt=""
                         />
                     </Link>
                 </div>

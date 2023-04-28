@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Moment from "react-moment"
-import Linkify from "linkify-react"
+import Linkify from 'react-linkify';
 import Zoom from "react-medium-image-zoom"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
@@ -166,7 +166,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
                         {!postPage && (
                             <div className="mt-2">
                                 <p className="text-sm md:text-base w-fit">
-                                    <Linkify options={linkifyOptions}>
+                                    <Linkify>
                                         {post?.text}
                                     </Linkify>
                                 </p>
@@ -186,7 +186,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
                 {postPage && (
                     <div className="text-zinc-300 mt-2">
                         <p className="text-sm md:text-base mb-2">
-                            <Linkify options={linkifyOptions}>
+                            <Linkify >
                                 {post?.text}
                             </Linkify>
                         </p>

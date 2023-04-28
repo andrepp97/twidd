@@ -18,7 +18,7 @@ const Widgets = () => {
                 noHeader
                 transparent
                 theme="dark"
-                sourceType="likes"
+                sourceType="profile"
                 screenName="elonmusk"
             />
 

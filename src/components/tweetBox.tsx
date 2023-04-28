@@ -96,8 +96,8 @@ const TweetBox = () => {
             <div className="w-fit">
                 <Image
                     src={session.user.image}
+                    style={{ objectFit: 'contain' }}
                     className="rounded-full"
-                    objectFit="contain"
                     height={48}
                     width={48}
                     alt="You"
