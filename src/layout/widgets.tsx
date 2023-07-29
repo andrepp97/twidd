@@ -9,7 +9,7 @@ const Widgets = () => {
                 <SearchIcon className="h-5 w-5" />
                 <input
                     type="search"
-                    placeholder="Search Twitme"
+                    placeholder="Search Twidd"
                     className="flex-1 outline-none bg-transparent placeholder:text-gray-400"
                 />
             </div>

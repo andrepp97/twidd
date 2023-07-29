@@ -16,7 +16,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
     return (
         <div className='bg-zinc-900'>
             <Head>
-                <title>Home / Twitme</title>
+                <title>Home / Twidd</title>
                 <link rel="icon" href="/favicon.png" />
                 <meta name="keywords" content={meta.keywords} />
                 <meta name="description" content={meta.description} />
