@@ -1,6 +1,5 @@
 import Image from "next/image"
 import Moment from "react-moment"
-import Linkify from 'react-linkify';
 import Zoom from "react-medium-image-zoom"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
@@ -13,12 +12,25 @@ import { db } from "../lib/firebase"
 import PostActions from "./postActions"
 import SharePost from "./sharePost"
 
-const linkifyOptions = {
-    className: "text-blue-500 hover:underline break-all",
-    rel: "noopener noreferrer",
-    target: "_blank",
-    validate: true,
-    truncate: 0,
+const textWithLinks = (txt: string) => {
+    const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+    return txt
+        .split(" ")
+        .map((part, idx) =>
+            URL_REGEX.test(part)
+                ? (
+                    <a
+                        key={idx}
+                        href={part}
+                        className="text-blue-600"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        {part}
+                    </a>
+                )
+                : part + " "
+        );
 }
 
 interface PostProps {
@@ -166,9 +178,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
                         {!postPage && (
                             <div className="mt-2">
                                 <p className="text-sm md:text-base w-fit">
-                                    <Linkify>
-                                        {post?.text}
-                                    </Linkify>
+                                    {post && textWithLinks(post?.text)}
                                 </p>
                                 {post?.image && (
                                     <img
@@ -186,9 +196,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
                 {postPage && (
                     <div className="text-zinc-300 mt-2">
                         <p className="text-sm md:text-base mb-2">
-                            <Linkify >
-                                {post?.text}
-                            </Linkify>
+                            {post && textWithLinks(post?.text)}
                         </p>
                         {post?.image && (
                             <Zoom>
