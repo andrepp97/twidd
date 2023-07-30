@@ -1,7 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { RefreshIcon } from '@heroicons/react/outline'
 import { getProviders, getSession, useSession } from 'next-auth/react'
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import {
+    collection,
+    onSnapshot,
+    orderBy,
+    query,
+    addDoc,
+    getDocs,
+    where,
+    serverTimestamp,
+    DocumentData,
+} from 'firebase/firestore'
 import { db } from '../lib/firebase'
 import { useRecoilValue } from 'recoil'
 import { modalState } from '../atoms/modalAtom'
@@ -34,7 +44,25 @@ const Home = ({ providers }: any) => {
 
     // Function
     const getPosts = () => {
-        onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snapshopt: any) => setPosts(snapshopt.docs))
+        onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snapshot: any) => setPosts(snapshot.docs))
+    }
+
+    const insertUser = async () => {
+        try {
+            const { uid } = session?.user
+            const q = query(collection(db, "users"), where("uid", "==", uid))
+            const result = await getDocs(q);
+            let users: { id: string; data: DocumentData }[] = []
+            result.forEach((doc) => {
+                users.push({
+                    id: doc.id,
+                    data: doc.data(),
+                })
+            })
+            if (!users.length) addDoc(collection(db, "users"), { ...session?.user, timestamp: serverTimestamp() })
+        } catch (error) {
+            console.log('masuk catch')
+        }
     }
 
     const executeScroll = () => {
@@ -57,6 +85,10 @@ const Home = ({ providers }: any) => {
     useEffect(() => {
         return getPosts()
     }, [db])
+
+    useEffect(() => {
+        if (session) insertUser()
+    }, [session])
 
     // Render
     if (!session) return <Login providers={providers} />
