@@ -17,34 +17,34 @@ import UserProfile from '../components/userInfo'
 import TweetBox from '../components/tweetBox'
 import Modal from '../components/modal'
 
-const sidebarItems = [
-    {
-        title: "Home",
-        icon: HomeIcon,
-        path: "/",
-    },
-    {
-        title: "Profile",
-        icon: UserIcon,
-        path: "/profile",
-    },
-    {
-        title: "Messages",
-        icon: MailIcon,
-        path: "/messages",
-    },
-    {
-        title: "Notifications",
-        icon: BellIcon,
-        path: "/notifications",
-    },
-]
-
 const Sidebar = () => {
     // Hooks
     const { data: session }: any = useSession()
     const [open, setOpen] = useState(false)
     const [isOpen, setIsOpen] = useRecoilState(modalState)
+
+    const sidebarItems = [
+        {
+            title: "Home",
+            icon: HomeIcon,
+            path: "/",
+        },
+        {
+            title: "Profile",
+            icon: UserIcon,
+            path: `/profile/${session?.user?.uid}`,
+        },
+        {
+            title: "Messages",
+            icon: MailIcon,
+            path: "/messages",
+        },
+        {
+            title: "Notifications",
+            icon: BellIcon,
+            path: "/notifications",
+        },
+    ]
 
     // Function
     const userSignout = () => {
