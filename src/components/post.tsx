@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Image from "next/image"
 import Moment from "react-moment"
 import Zoom from "react-medium-image-zoom"
@@ -93,7 +94,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
     }
 
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(`https://twitme.netlify.app/post/${id}`)
+        navigator.clipboard.writeText(`https://twidd.vercel.app/post/${id}`)
         setCopied(true)
     }
 
@@ -154,9 +155,15 @@ const Post = ({ id, post, postPage }: PostProps) => {
                     <div className="text-zinc-300 w-full ml-2">
                         <div className="w-full flex items-center justify-between">
                             <div className="inline-block group">
-                                <p className={`text-[14px] lg:text-sm font-semibold group-hover:underline ${!postPage && "inline-block"}`}>
-                                    {post?.username}
-                                </p>
+                                <Link
+                                    passHref={true}
+                                    href={"/profile/" + post?.id}
+                                    onClick={e => e.stopPropagation()}
+                                >
+                                    <p className={`text-[14px] lg:text-sm font-semibold group-hover:underline ${!postPage && "inline-block"}`}>
+                                        {post?.username}
+                                    </p>
+                                </Link>
                                 <small className={`text-gray-400 text-xs ${!postPage && "ml-1"}`}>
                                     @{post?.tag}
                                 </small>
@@ -227,10 +234,10 @@ const Post = ({ id, post, postPage }: PostProps) => {
                         onClick={e => e.stopPropagation()}
                         className="absolute right-0 bottom-10 z-10 bg-zinc-700 bg-opacity-95 rounded-lg max-w-xs space-y-3 p-3"
                     >
-                        <SharePost url={`https://twitme.netlify.app/post/${id}`} />
+                        <SharePost url={`https://twidd.vercel.app/post/${id}`} />
                         <div className="flex items-center gap-1 text-gray-300 w-auto">
                             <p className="overflow-auto text-sm rounded-sm border border-gray-400 p-1">
-                                {`https://twitme.netlify.app/post/${id}`}
+                                {`https://twidd.vercel.app/post/${id}`}
                             </p>
                             <button
                                 onClick={copyToClipboard}
