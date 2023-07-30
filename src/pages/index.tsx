@@ -51,7 +51,7 @@ const Home = ({ providers }: any) => {
         try {
             const { uid } = session?.user
             const q = query(collection(db, "users"), where("uid", "==", uid))
-            const result = await getDocs(q);
+            const result = await getDocs(q)
             let users: { id: string; data: DocumentData }[] = []
             result.forEach((doc) => {
                 users.push({

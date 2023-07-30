@@ -32,6 +32,9 @@ const Login = ({ providers }: ProviderProps) => {
                 width={150}
                 height={120}
             />
+            <p className="text-white text-2xl font-semibold">
+                Join Twidd today
+            </p>
             {Object.values(providers).map((provider, index) => (
                 <button
                     key={index}

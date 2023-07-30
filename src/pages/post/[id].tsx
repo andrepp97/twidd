@@ -63,7 +63,7 @@ const PostPage = ({ providers }: any) => {
 
                 <Head>
                     <title>
-                        {post?.username} on Twitme: "{post?.text}"
+                        {post?.username} on Twidd: "{post?.text}"
                     </title>
                 </Head>
 
