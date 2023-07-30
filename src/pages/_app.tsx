@@ -5,7 +5,6 @@ import { RecoilRoot } from 'recoil'
 import Main from '../layout/main'
 import '../styles/globals.css'
 import 'emoji-mart/css/emoji-mart.css'
-import 'react-medium-image-zoom/dist/styles.css'
 
 const meta = {
     keywords: "twitter, social, media, tweet, twidd, chat, nextjs, react, tailwind, css, firebase",
