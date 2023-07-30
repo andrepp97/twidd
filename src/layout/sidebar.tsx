@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import {
     HomeIcon,
-    HashtagIcon,
+    UserIcon,
     BellIcon,
     MailIcon,
     PencilIcon,
@@ -24,9 +24,9 @@ const sidebarItems = [
         path: "/",
     },
     {
-        title: "Explore",
-        icon: HashtagIcon,
-        path: "/explore",
+        title: "Profile",
+        icon: UserIcon,
+        path: "/profile",
     },
     {
         title: "Messages",
@@ -80,7 +80,7 @@ const Sidebar = () => {
                         />
                     </Link>
                 </div>
-                <div className='flex items-center sm:block gap-x-2 sm:space-y-1 sm:my-6'>
+                <div className='flex sm:flex-col sm:items-start items-center gap-2 sm:my-6'>
                     {sidebarItems.map((item, index) => (
                         <SidebarItem
                             key={index}

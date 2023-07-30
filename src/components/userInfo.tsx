@@ -10,10 +10,10 @@ interface ProfileProps {
 const UserInfo = ({ open, openMenu, session, signout }: ProfileProps) => {
     return (
         <div className='relative'>
-            <div className={`absolute -top-20 md:-top-[60px] bg-embed w-fit md:w-full h-fit p-1 rounded shadow shadow-zinc-500 transition-all duration-200 opacity-0 ${open && "opacity-100"}`}>
+            <div className={`absolute -top-20 md:-top-[48px] bg-embed w-fit md:w-full h-fit p-1 rounded shadow-md shadow-zinc-500 transition-all duration-200 opacity-0 ${open && "opacity-100"}`}>
                 <button
                     onClick={() => signout()}
-                    className='w-full tracking-wide text-zinc-100 hover:bg-gray-700 rounded p-2'
+                    className='w-full tracking-wide text-zinc-100 hover:bg-gray-700 rounded p-1'
                 >
                     Logout <small className='text-gray-300'>@{session?.user?.tag}</small>
                 </button>

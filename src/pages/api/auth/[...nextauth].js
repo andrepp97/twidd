@@ -11,7 +11,6 @@ export default NextAuth({
     callbacks: {
         async session({ session, token }) {
             session.user.tag = session.user.name.split(" ").join("").toLowerCase()
-
             session.user.uid = token.sub
             return session
         }

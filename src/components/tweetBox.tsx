@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/react'
 import {
     PhotographIcon,
     EmojiHappyIcon,
-    CalendarIcon,
     XIcon,
 } from '@heroicons/react/outline'
 import {
@@ -152,7 +151,6 @@ const TweetBox = () => {
                                                 className="h-5 w-5 cursor-pointer hover:text-zinc-100"
                                             />
                                         </div>
-                                        <CalendarIcon className="h-5 w-5 cursor-pointer hover:text-zinc-100" />
                                         {showEmoji && (
                                             <Picker
                                                 theme="dark"
