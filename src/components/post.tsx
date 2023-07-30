@@ -1,3 +1,4 @@
+import React from 'react';
 import Link from 'next/link'
 import Image from "next/image"
 import Moment from "react-moment"
@@ -14,24 +15,30 @@ import PostActions from "./postActions"
 import SharePost from "./sharePost"
 
 const textWithLinks = (txt: string) => {
-    const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
-    return txt
-        .split(" ")
-        .map((part, idx) =>
-            URL_REGEX.test(part)
-                ? (
-                    <a
-                        key={idx}
-                        href={part}
-                        className="text-blue-600"
-                        target="_blank"
-                        rel="noopener"
-                    >
-                        {part}
-                    </a>
-                )
-                : part + " "
-        );
+    const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
+    const words = txt.split(" ")
+    return words.map((word, idx) => URL_REGEX.test(word)
+        ? (
+            <React.Fragment key={idx}>
+                <a
+                    href={word}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={e => e.stopPropagation()}
+                    className="text-blue-600 hover:underline"
+                    style={{
+                        overflowWrap: 'break-word',
+                        wordWrap: 'break-word',
+                        wordBreak: 'break-word',
+                        hyphens: 'auto',
+                    }}
+                >
+                    {word}
+                </a>{' '}
+            </React.Fragment>
+        )
+        : word + " "
+    );
 }
 
 interface PostProps {
@@ -183,8 +190,8 @@ const Post = ({ id, post, postPage }: PostProps) => {
                         </div>
 
                         {!postPage && (
-                            <div className="mt-2">
-                                <p className="text-sm md:text-base w-fit">
+                            <div className="mt-2 w-auto">
+                                <p className="text-sm md:text-base w-auto">
                                     {post && textWithLinks(post?.text)}
                                 </p>
                                 {post?.image && (
@@ -202,7 +209,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
 
                 {postPage && (
                     <div className="text-zinc-300 mt-2">
-                        <p className="text-sm md:text-base mb-2">
+                        <p className="text-sm md:text-base w-auto mb-2">
                             {post && textWithLinks(post?.text)}
                         </p>
                         {post?.image && (
