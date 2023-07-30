@@ -22,6 +22,15 @@ import CommentBox from '../components/commentBox'
 import TweetBox from '../components/tweetBox'
 import Modal from '../components/modal'
 
+interface User {
+    uid: number;
+    name: string;
+    tag: string;
+    email: string;
+    image: string;
+    timestamp?: string;
+}
+
 export async function getServerSideProps(context: any) {
     const session = await getSession(context)
     const providers = await getProviders()
@@ -49,7 +58,8 @@ const Home = ({ providers }: any) => {
 
     const insertUser = async () => {
         try {
-            const { uid } = session?.user
+            const userTemp: User | any = session?.user
+            const { uid } = userTemp
             const q = query(collection(db, "users"), where("uid", "==", uid))
             const result = await getDocs(q)
             let users: { id: string; data: DocumentData }[] = []
