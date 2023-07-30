@@ -11,8 +11,9 @@ interface SidebarProps {
 const SidebarItem = ({ Icon, title, path }: SidebarProps) => {
     // Hooks
     const { pathname, query } = useRouter()
+    const { id }: any = query
     
-    const newPath = query?.id ? pathname.replace('[id]', query?.id) : pathname
+    const newPath = query?.id ? pathname.replace('[id]', id) : pathname
 
     // Render
     return (
