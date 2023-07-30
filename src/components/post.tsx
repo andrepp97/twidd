@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link'
 import Image from "next/image"
 import Moment from "react-moment"
-import Zoom from "react-medium-image-zoom"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useSession } from "next-auth/react"
@@ -213,13 +212,11 @@ const Post = ({ id, post, postPage }: PostProps) => {
                             {post && textWithLinks(post?.text)}
                         </p>
                         {post?.image && (
-                            <Zoom>
-                                <img
-                                    className={`rounded-lg object-cover w-full ${postPage ? "h-fit" : "max-h-96"}`}
-                                    src={post.image}
-                                    alt=""
-                                />
-                            </Zoom>
+                            <img
+                                className={`rounded-lg object-cover w-full ${postPage ? "h-fit" : "max-h-96"}`}
+                                src={post.image}
+                                alt=""
+                            />
                         )}
                     </div>
                 )}

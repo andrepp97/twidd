@@ -16,7 +16,7 @@ const Main = ({ children }: LayoutProps) => {
         <main className='lg:max-w-7xl mx-auto'>
             <div className="flex relative">
                 {session && <Sidebar />}
-                <main className='grid grid-cols-6 w-full max-h-screen'>
+                <main className='grid grid-cols-6 w-full max-h-screen overflow-auto'>
                     <div className={`col-span-6 ${session && "lg:col-span-4"} overflow-auto`}>
                         {children}
                         <Footer />
