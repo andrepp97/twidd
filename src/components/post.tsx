@@ -194,9 +194,11 @@ const Post = ({ id, post, postPage }: PostProps) => {
                                     {post && textWithLinks(post?.text)}
                                 </p>
                                 {post?.image && (
-                                    <img
+                                    <Image
                                         className={`rounded-lg object-cover mt-2 w-full ${postPage ? "h-fit" : "max-h-96"}`}
                                         src={post.image}
+                                        height={720}
+                                        width={400}
                                         alt=""
                                     />
                                 )}
@@ -212,9 +214,11 @@ const Post = ({ id, post, postPage }: PostProps) => {
                             {post && textWithLinks(post?.text)}
                         </p>
                         {post?.image && (
-                            <img
-                                className={`rounded-lg object-cover w-full ${postPage ? "h-fit" : "max-h-96"}`}
+                            <Image
+                                className={`rounded-lg object-contain w-full max-h-screen`}
                                 src={post.image}
+                                height={720}
+                                width={400}
                                 alt=""
                             />
                         )}
