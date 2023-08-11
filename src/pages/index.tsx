@@ -71,7 +71,7 @@ const Home = ({ providers }: any) => {
             })
             if (!users.length) addDoc(collection(db, "users"), { ...session?.user, timestamp: serverTimestamp() })
         } catch (error) {
-            console.log('masuk catch')
+            console.log(error)
         }
     }
 
