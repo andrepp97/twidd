@@ -132,13 +132,19 @@ const Post = ({ id, post, postPage }: PostProps) => {
 
             {!postPage && post?.userImg && (
                 <div className="min-w-fit">
-                    <Image
-                        className="rounded-full"
-                        src={post?.userImg}
-                        height={44}
-                        width={44}
-                        alt=""
-                    />
+                    <Link
+                        passHref={true}
+                        href={"/profile/" + post?.id}
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <Image
+                            className="rounded-full"
+                            src={post?.userImg}
+                            height={44}
+                            width={44}
+                            alt=""
+                        />
+                    </Link>
                 </div>
             )}
 
