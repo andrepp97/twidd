@@ -10,8 +10,6 @@
     "@heroicons/react": "^1.0.6",
     "emoji-mart": "3.0.1",
     "firebase": "^9.8.4",
-    "linkify-react": "^3.0.4",
-    "linkifyjs": "^4.1.1",
     "moment": "^2.29.3",
     "next": "latest",
     "next-auth": "^4.6.1",
