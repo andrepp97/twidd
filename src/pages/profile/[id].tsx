@@ -13,6 +13,7 @@ import {
     DocumentData,
 } from "@firebase/firestore"
 import { db } from '../../lib/firebase'
+import Post from '../../components/post'
 import Login from '../../components/login'
 import Spinner from '../../components/spinner'
 
@@ -30,17 +31,32 @@ const Profile = ({ providers }: any) => {
     const { id }: any = router.query
     const { data: session }: any = useSession()
     const [data, setData] = useState<any>()
+    const [userPosts, setUserPosts] = useState<Array<{ id: string, data: any }> | null>(null)
 
     // Function
     const getUserProfile = async () => {
-        const q = query(collection(db, "users"), where("uid", "==", id))
-        const result = await getDocs(q)
         let users: DocumentData[] = []
+        let posts: Array<{ id: string, data: any }> = []
+
+        const userQuery = query(collection(db, "users"), where("uid", "==", id))
+        const postsQuery = query(collection(db, "posts"), where("id", "==", id))
+        const result = await getDocs(userQuery)
+        const postsResult = await getDocs(postsQuery)
         result.forEach((doc) => users.push(doc.data()))
+        postsResult.forEach((doc) => posts.push({
+            id: doc.id,
+            data: doc.data(),
+        }))
+
         setData(users[0])
+        setUserPosts(posts)
     }
 
     // Lifecycle
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
+
     useEffect(() => {
         if (id) getUserProfile()
     }, [id])
@@ -85,6 +101,25 @@ const Profile = ({ providers }: any) => {
                             </Moment>
                         </p>
                     </div>
+                </div>
+                <div>
+                    <p className="text-zinc-200 font-semibold border-[#1D9BF0] border-b-2 w-fit m-4 p-1">
+                        Posts
+                    </p>
+                    {
+                        userPosts
+                            ? userPosts.length
+                                ? userPosts.map(post => (
+                                    <Post
+                                        id={post.id}
+                                        key={post.id}
+                                        post={post.data}
+                                        postPage={undefined}
+                                    />
+                                ))
+                                : <p className="text-zinc-300 px-4">No posts yet</p>
+                            : <div className="py-4"><Spinner /></div>
+                    }
                 </div>
             </div>
         );
