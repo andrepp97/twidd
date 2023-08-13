@@ -70,7 +70,7 @@ const PostPage = ({ providers }: any) => {
                 <div className="flex-grow">
                     <div className="flex items-center p-2 border-b border-gray-700 bg-zinc-900 text-zinc-100 font-semibold text-xl gap-x-4 sticky top-0 z-10">
                         <div
-                            onClick={() => router.push("/")}
+                            onClick={() => router.back()}
                             className="flex items-center justify-center hover:bg-gray-700 cursor-pointer rounded-full p-1"
                         >
                             <ArrowLeftIcon className="h-5 w-5 text-white" />
