@@ -1,13 +1,24 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
+import {
+    query,
+    getDocs,
+    orderBy,
+    startAt,
+    endAt,
+    collection,
+    DocumentData,
+} from "@firebase/firestore"
+import { db } from '../lib/firebase'
 import {
     HomeIcon,
     UserIcon,
     BellIcon,
     MailIcon,
     PencilIcon,
+    SearchIcon,
 } from '@heroicons/react/outline'
 import { useRecoilState } from 'recoil'
 import { modalState } from '../atoms/modalAtom'
@@ -17,10 +28,14 @@ import UserProfile from '../components/userInfo'
 import TweetBox from '../components/tweetBox'
 import Modal from '../components/modal'
 
+
 const Sidebar = () => {
     // Hooks
     const { data: session }: any = useSession()
-    const [open, setOpen] = useState(false)
+    const [width, setWidth] = useState<number>(0)
+    const [open, setOpen] = useState<boolean>(false)
+    const [searchText, setSearchText] = useState<string>('')
+    const [results, setResults] = useState<Array<any> | null>(null)
     const [isOpen, setIsOpen] = useRecoilState(modalState)
 
     const sidebarItems = [
@@ -28,29 +43,65 @@ const Sidebar = () => {
             title: "Home",
             icon: HomeIcon,
             path: "/",
+            show: true,
+        },
+        {
+            title: "Search",
+            icon: SearchIcon,
+            path: null,
+            onClick: () => setIsOpen('search'),
+            show: width < 1024,
         },
         {
             title: "Profile",
             icon: UserIcon,
             path: `/profile/${session?.user?.uid}`,
+            show: true,
         },
         {
             title: "Messages",
             icon: MailIcon,
             path: "/messages",
+            show: width >= 640,
         },
         {
             title: "Notifications",
             icon: BellIcon,
             path: "/notifications",
+            show: width >= 640,
         },
     ]
 
-    // Function
+    // Functions
+    const onSearch = async () => {
+        let users: DocumentData[] = []
+        const userQuery = query(collection(db, "users"), orderBy('tag'), startAt(searchText.toLowerCase()), endAt(searchText.toLowerCase() + '\uf8ff'))
+        const result = await getDocs(userQuery)
+        result.forEach((doc) => users.push(doc.data()))
+        setResults(users)
+    }
+
     const userSignout = () => {
         signOut()
         setOpen(false)
     }
+
+    // Lifecycle
+    useEffect(() => {
+        setWidth(window.innerWidth)
+    })
+
+    useEffect(() => {
+        if (searchText.trim()) {
+            const debounceFunc = setTimeout(async () => {
+                onSearch()
+            }, 750)
+
+            return () => clearTimeout(debounceFunc)
+        } else {
+            setResults(null)
+        }
+    }, [searchText])
 
     // Render
     return (
@@ -80,13 +131,14 @@ const Sidebar = () => {
                         />
                     </Link>
                 </div>
-                <div className='flex sm:flex-col sm:items-start items-center gap-2 sm:my-6'>
-                    {sidebarItems.map((item, index) => (
+                <div className='flex sm:flex-col sm:items-start items-center gap-3 sm:my-6'>
+                    {sidebarItems.map((item, index) => item.show && (
                         <SidebarItem
                             key={index}
                             Icon={item.icon}
                             title={item.title}
                             path={item.path}
+                            clickFunction={item.onClick}
                         />
                     ))}
                 </div>
@@ -106,9 +158,62 @@ const Sidebar = () => {
                 openMenu={() => setOpen(prev => !prev)}
             />
 
-            {isOpen === "tweet" && (
+            {isOpen && (
                 <Modal>
-                    <TweetBox />
+                    {
+                        isOpen === "tweet"
+                            ? <TweetBox />
+                            : (
+                                <div className="p-4">
+                                    <div className="flex items-center rounded space-x-2 px-4 py-2 bg-zinc-800 text-gray-400">
+                                        <SearchIcon className="h-5 w-5" />
+                                        <input
+                                            type="search"
+                                            placeholder="Search Twidd"
+                                            className="flex-1 outline-none bg-transparent placeholder:text-gray-400"
+                                            onChange={e => setSearchText(e.target.value)}
+                                            value={searchText}
+                                        />
+                                    </div>
+                                    {(searchText && results) && (
+                                        <div className="bg-zinc-800 flex flex-col gap-y-2 p-2 mt-2 rounded">
+                                            {
+                                                results?.length
+                                                    ? results.map(result => (
+                                                        <Link
+                                                            key={result.uid}
+                                                            passHref={true}
+                                                            onClick={() => {
+                                                                setIsOpen('')
+                                                                setSearchText('')
+                                                            }}
+                                                            href={"/profile/" + result?.uid}
+                                                            className="hover:bg-zinc-700 flex rounded gap-x-2 px-2 py-1"
+                                                        >
+                                                            <Image
+                                                                className="rounded-full w-auto"
+                                                                src={result?.image}
+                                                                height={42}
+                                                                width={42}
+                                                                alt=""
+                                                            />
+                                                            <div>
+                                                                <h4 className='font-semibold text-zinc-300'>
+                                                                    {result?.name}
+                                                                </h4>
+                                                                <p className='text-gray-400 text-xs'>
+                                                                    @{result?.tag}
+                                                                </p>
+                                                            </div>
+                                                        </Link>
+                                                    ))
+                                                    : <p className="text-center text-zinc-300">No Result</p>
+                                            }
+                                        </div>
+                                    )}
+                                </div>
+                            )
+                    }
                 </Modal>
             )}
 
