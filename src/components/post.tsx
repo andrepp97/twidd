@@ -88,7 +88,9 @@ const Post = ({ id, post, postPage }: PostProps) => {
             await deleteDoc(doc(db, "posts", id, "likes", session.user.uid))
         } else {
             await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
-                username: session.user.name
+                tag: session.user.tag,
+                username: session.user.name,
+                userImg: session.user.image,
             })
         }
     }
