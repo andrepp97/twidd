@@ -2,9 +2,9 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Moment from "react-moment"
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { getProviders, useSession } from 'next-auth/react'
-import { CalendarIcon } from '@heroicons/react/outline'
+import { CalendarIcon, ArrowLeftIcon } from '@heroicons/react/outline'
 import {
     query,
     getDocs,
@@ -27,6 +27,7 @@ export async function getServerSideProps() {
 
 const Profile = ({ providers }: any) => {
     // Hooks
+    const profileRef = useRef<any>()
     const router = useRouter()
     const { id }: any = router.query
     const { data: session }: any = useSession()
@@ -38,25 +39,29 @@ const Profile = ({ providers }: any) => {
         let users: DocumentData[] = []
         let posts: Array<{ id: string, data: any }> = []
 
-        const userQuery = query(collection(db, "users"), where("uid", "==", id))
-        const postsQuery = query(collection(db, "posts"), where("id", "==", id))
-        const result = await getDocs(userQuery)
-        const postsResult = await getDocs(postsQuery)
-        result.forEach((doc) => users.push(doc.data()))
-        postsResult.forEach((doc) => posts.push({
-            id: doc.id,
-            data: doc.data(),
-        }))
+        try {
+            const userQuery = query(collection(db, "users"), where("uid", "==", id))
+            const postsQuery = query(collection(db, "posts"), where("id", "==", id))
+            const result = await getDocs(userQuery)
+            const postsResult = await getDocs(postsQuery)
+            result.forEach((doc) => users.push(doc.data()))
+            postsResult.forEach((doc) => posts.push({
+                id: doc.id,
+                data: doc.data(),
+            }))
 
-        setData(users[0])
-        setUserPosts(posts)
+            setData(users[0])
+            setUserPosts(posts)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setTimeout(() => {
+                profileRef?.current?.scrollIntoView({ behavior: "smooth" })
+            }, 250);
+        }
     }
 
     // Lifecycle
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
-
     useEffect(() => {
         if (id) getUserProfile()
     }, [id])
@@ -71,13 +76,29 @@ const Profile = ({ providers }: any) => {
     return !session
         ? <Login providers={providers} />
         : (
-            <div className='pb-80'>
+            <div ref={profileRef} className='pb-80'>
                 <Head>
                     <title>
                         {data?.name} (@{data?.tag})
                     </title>
                 </Head>
-                <div className="h-48 w-full bg-zinc-700" />
+                <div className="flex items-center p-2 border-b border-gray-700 bg-zinc-900 text-zinc-100 font-semibold text-xl gap-x-4 sticky top-0 z-10">
+                    <div
+                        onClick={() => router.back()}
+                        className="flex items-center justify-center hover:bg-gray-700 cursor-pointer rounded-full p-1"
+                    >
+                        <ArrowLeftIcon className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                        <p className='font-semibold text-zinc-200 text-base'>
+                            {data?.name}
+                        </p>
+                        <p className='text-gray-400 text-sm'>
+                            {userPosts?.length} posts
+                        </p>
+                    </div>
+                </div>
+                <div className="h-44 w-full bg-zinc-700" />
                 <div className='leading-5 p-4'>
                     <Image
                         alt=""
