@@ -49,7 +49,7 @@ const Widgets = () => {
                     <SearchIcon className="h-5 w-5" />
                     <input
                         type="search"
-                        placeholder="Search Twidd"
+                        placeholder="Search username"
                         className="flex-1 outline-none bg-transparent placeholder:text-gray-400"
                         onChange={e => setSearchText(e.target.value)}
                         value={searchText}
