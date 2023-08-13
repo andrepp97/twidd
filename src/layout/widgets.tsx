@@ -56,7 +56,7 @@ const Widgets = () => {
                     />
                 </div>
                 {(searchText && results) && (
-                    <div className="bg-zinc-800 flex flex-col gap-y-2 p-2 mt-1 rounded">
+                    <div className="bg-zinc-800 flex flex-col gap-y-2 p-2 mt-2 rounded">
                         {
                             results?.length
                                 ? results.map(result => (
