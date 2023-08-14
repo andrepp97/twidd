@@ -163,56 +163,57 @@ const Sidebar = () => {
                     {
                         isOpen === "tweet"
                             ? <TweetBox />
-                            : (
-                                <div className="p-4">
-                                    <div className="flex items-center rounded space-x-2 px-4 py-2 bg-zinc-800 text-gray-400">
-                                        <SearchIcon className="h-5 w-5" />
-                                        <input
-                                            type="search"
-                                            placeholder="Search username"
-                                            className="flex-1 outline-none bg-transparent placeholder:text-gray-400"
-                                            onChange={e => setSearchText(e.target.value)}
-                                            value={searchText}
-                                        />
-                                    </div>
-                                    {(searchText && results) && (
-                                        <div className="bg-zinc-800 flex flex-col gap-y-2 p-2 mt-2 rounded">
-                                            {
-                                                results?.length
-                                                    ? results.map(result => (
-                                                        <Link
-                                                            key={result.uid}
-                                                            passHref={true}
-                                                            onClick={() => {
-                                                                setIsOpen('')
-                                                                setSearchText('')
-                                                            }}
-                                                            href={"/profile/" + result?.uid}
-                                                            className="hover:bg-zinc-700 flex rounded gap-x-2 px-2 py-1"
-                                                        >
-                                                            <Image
-                                                                className="rounded-full w-auto"
-                                                                src={result?.image}
-                                                                height={42}
-                                                                width={42}
-                                                                alt=""
-                                                            />
-                                                            <div>
-                                                                <h4 className='font-semibold text-zinc-300'>
-                                                                    {result?.name}
-                                                                </h4>
-                                                                <p className='text-gray-400 text-xs'>
-                                                                    @{result?.tag}
-                                                                </p>
-                                                            </div>
-                                                        </Link>
-                                                    ))
-                                                    : <p className="text-center text-zinc-300">No Result</p>
-                                            }
+                            : isOpen === "search"
+                                ? (
+                                    <div className="p-4">
+                                        <div className="flex items-center rounded space-x-2 px-4 py-2 bg-zinc-800 text-gray-400">
+                                            <SearchIcon className="h-5 w-5" />
+                                            <input
+                                                type="search"
+                                                placeholder="Search username"
+                                                className="flex-1 outline-none bg-transparent placeholder:text-gray-400"
+                                                onChange={e => setSearchText(e.target.value)}
+                                                value={searchText}
+                                            />
                                         </div>
-                                    )}
-                                </div>
-                            )
+                                        {(searchText && results) && (
+                                            <div className="bg-zinc-800 flex flex-col gap-y-2 p-2 mt-2 rounded">
+                                                {
+                                                    results?.length
+                                                        ? results.map(result => (
+                                                            <Link
+                                                                key={result.uid}
+                                                                passHref={true}
+                                                                onClick={() => {
+                                                                    setIsOpen('')
+                                                                    setSearchText('')
+                                                                }}
+                                                                href={"/profile/" + result?.uid}
+                                                                className="hover:bg-zinc-700 flex rounded gap-x-2 px-2 py-1"
+                                                            >
+                                                                <Image
+                                                                    className="rounded-full w-auto"
+                                                                    src={result?.image}
+                                                                    height={42}
+                                                                    width={42}
+                                                                    alt=""
+                                                                />
+                                                                <div>
+                                                                    <h4 className='font-semibold text-zinc-300'>
+                                                                        {result?.name}
+                                                                    </h4>
+                                                                    <p className='text-gray-400 text-xs'>
+                                                                        @{result?.tag}
+                                                                    </p>
+                                                                </div>
+                                                            </Link>
+                                                        ))
+                                                        : <p className="text-center text-zinc-300">No Result</p>
+                                                }
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : null
                     }
                 </Modal>
             )}
