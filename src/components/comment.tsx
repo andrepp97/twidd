@@ -20,7 +20,7 @@ const Comment = ({ comment }: any) => {
                 </Link>
             </div>
             <div className="flex flex-col space-y-2 w-full">
-                <div className="flex justify-between">
+                <div className="flex flex-col justify-between">
                     <Link
                         passHref={true}
                         href={"/profile/" + comment?.userId}
@@ -40,10 +40,10 @@ const Comment = ({ comment }: any) => {
                                 </Moment>
                             </small>
                         </div>
-                        <p className="text-[#d9d9d9] mt-2 max-w-lg overflow-scroll text-[15px] sm:text-base">
-                            {comment?.comment}
-                        </p>
                     </Link>
+                    <p className="text-[#d9d9d9] mt-2 max-w-lg overflow-scroll text-[15px] sm:text-base">
+                        {comment?.comment}
+                    </p>
                 </div>
             </div>
         </div>
