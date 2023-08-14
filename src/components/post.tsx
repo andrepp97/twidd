@@ -12,6 +12,7 @@ import { collection, deleteDoc, doc, onSnapshot, orderBy, query, setDoc } from "
 import { db } from "../lib/firebase"
 import PostActions from "./postActions"
 import SharePost from "./sharePost"
+import Modal from '../components/modal'
 
 const textWithLinks = (txt: string) => {
     const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
@@ -118,7 +119,12 @@ const Post = ({ id, post, postPage }: PostProps) => {
     }, [db, id])
 
     useEffect(() => {
-        return onSnapshot(collection(db, "posts", id, "likes"), (snapshot => setLikes(snapshot.docs)))
+        return onSnapshot(collection(db, "posts", id, "likes"), (snapshot => setLikes(snapshot.docs.map(item => {
+            return {
+                id: item.id,
+                ...item.data(),
+            }
+        }))))
     }, [db, id])
 
     useEffect(() => {
@@ -129,7 +135,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
     return (
         <div
             onClick={() => !postPage && router.push(`/post/${id}`)}
-            className={`${!postPage && "cursor-pointer"} flex border-b border-gray-700 hover:bg-neutral-800 p-4`}
+            className={`${postPage ? "p-5" : "cursor-pointer p-4"} flex border-b border-gray-700 hover:bg-neutral-800`}
         >
 
             {!postPage && post?.userImg && (
@@ -150,7 +156,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
                 </div>
             )}
 
-            <div className="flex flex-col space-y-2 w-full relative">
+            <div className="flex flex-col space-y-3 w-full relative">
 
                 <div className={`flex mb-2 ${!postPage && "justify-between"}`}>
 
@@ -223,7 +229,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
                 </div>
 
                 {postPage && (
-                    <div className="text-zinc-300 mt-2">
+                    <div className="text-zinc-300">
                         <p className="text-sm md:text-base w-auto mb-2">
                             {post && textWithLinks(post?.text)}
                         </p>
@@ -239,6 +245,26 @@ const Post = ({ id, post, postPage }: PostProps) => {
                     </div>
                 )}
 
+                {postPage && (
+                    <div className="flex items-center border-y border-gray-700 text-sm py-2">
+                        <Moment
+                            date={post?.timestamp.toDate()}
+                            className="text-gray-500"
+                            format="MMM DD, YYYY"
+                        />
+                        <span className="text-gray-300 mx-2">·</span>
+                        <p className="text-zinc-300">
+                            <b>{comments.length}</b> Comments
+                        </p>
+                        <span className="text-gray-300 mx-2">·</span>
+                        <p
+                            onClick={() => setIsOpen('likes')}
+                            className="text-zinc-300 cursor-pointer hover:underline"
+                        >
+                            <b>{likes.length}</b> Likes
+                        </p>
+                    </div>
+                )}
                 <PostActions
                     id={post?.id}
                     session={session}
@@ -249,6 +275,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
                     likePost={likePost}
                     likes={likes}
                     liked={liked}
+                    postPage={postPage}
                 />
 
                 {share && (
@@ -272,6 +299,42 @@ const Post = ({ id, post, postPage }: PostProps) => {
                 )}
             </div>
 
+            {isOpen === 'likes' && (
+                <Modal>
+                    <div className="p-4">
+                        <p className="text-zinc-300 text-lg font-semibold mb-4">
+                            Liked by
+                        </p>
+                        <div className="flex flex-col gap-y-2">
+                            {likes.map(like => (
+                                <Link
+                                    key={like.uid}
+                                    passHref={true}
+                                    onClick={() => setIsOpen('')}
+                                    href={"/profile/" + like?.id}
+                                    className="hover:bg-zinc-700 flex rounded gap-x-2 px-2 py-1"
+                                >
+                                    <Image
+                                        className="rounded-full w-auto"
+                                        src={like?.userImg}
+                                        height={36}
+                                        width={36}
+                                        alt=""
+                                    />
+                                    <div>
+                                        <h4 className='font-semibold text-zinc-300'>
+                                            {like?.username}
+                                        </h4>
+                                        <p className='text-gray-400 text-xs'>
+                                            @{like?.tag}
+                                        </p>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                </Modal>
+            )}
 
         </div>
     );

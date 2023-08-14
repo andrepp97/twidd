@@ -17,6 +17,7 @@ interface ActionsProps {
     likePost: Function
     likes: Array<any>
     liked: boolean
+    postPage: any
 }
 
 const PostActions = (props: ActionsProps) => {
@@ -31,6 +32,7 @@ const PostActions = (props: ActionsProps) => {
         likePost,
         likes,
         liked,
+        postPage,
     } = props
 
     // Render
@@ -44,7 +46,7 @@ const PostActions = (props: ActionsProps) => {
                 <div className="group iconButton">
                     <ChatIcon className="icon group-hover:text-blue-400" />
                 </div>
-                {comments.length > 0 && (
+                {(comments.length > 0 && !postPage) && (
                     <small className="group-hover:text-blue-400">
                         {comments.length}
                     </small>
@@ -73,27 +75,24 @@ const PostActions = (props: ActionsProps) => {
                 }
             </div>
 
-            <div
-                onClick={e => likePost(e)}
-                className="flex items-center space-x-1 group"
-            >
+            <div className="flex items-center space-x-1 group">
                 {
                     liked
                         ? (
-                            <div className="group iconButton text-pink-600">
+                            <div onClick={e => likePost(e)} className="group iconButton text-pink-600">
                                 <HeartSolidIcon className="icon group-hover:text-pink-600" />
                             </div>
                         )
                         : (
-                            <div className="group iconButton">
+                            <div onClick={e => likePost(e)} className="group iconButton">
                                 <HeartOutlineIcon className="icon group-hover:text-pink-600" />
                             </div>
                         )
                 }
-                {likes.length > 0 && (
-                    <small className={`group-hover:text-pink-600 ${liked && "text-pink-600"}`}>
+                {(likes.length > 0 && !postPage) && (
+                    <p className={`text-sm cursor-pointer hover:underline group-hover:text-pink-600 ${liked && "text-pink-600"}`}>
                         {likes.length}
-                    </small>
+                    </p>
                 )}
             </div>
 
