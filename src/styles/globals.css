@@ -8,7 +8,7 @@
     }
 
     .iconButton {
-        @apply hover:bg-zinc-700 transition-all duration-150 rounded-full p-2
+        @apply hover:bg-zinc-700 transition-all duration-150 rounded-full cursor-pointer p-2
     }
 }
 
