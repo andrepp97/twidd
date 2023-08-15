@@ -73,8 +73,8 @@ const Widgets = () => {
                                             width={42}
                                             alt=""
                                         />
-                                        <div>
-                                            <h4 className='font-semibold text-zinc-300'>
+                                        <div className="overflow-hidden">
+                                            <h4 className='font-semibold text-zinc-300 truncate'>
                                                 {result?.name}
                                             </h4>
                                             <p className='text-gray-400 text-xs'>
