@@ -171,7 +171,7 @@ const TweetBox = () => {
                                         disabled={!tweet.trim()}
                                         className="rounded-full font-semibold text-gray-300 bg-[#1D9BF0] hover:bg-[#1A8CD8] transition-all duration-150 disabled:opacity-50 px-4 py-2"
                                     >
-                                        Tweet
+                                        Post
                                     </button>
                                 </div>
                             )
