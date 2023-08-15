@@ -120,7 +120,7 @@ const CommentBox = () => {
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                             disabled={loading}
-                            placeholder="Tweet your reply"
+                            placeholder="Post your reply"
                             className="bg-transparent outline-none border border-zinc-700 rounded-lg text-[#d9d9d9] tracking-wide w-full min-h-[80px] p-2"
                         />
 

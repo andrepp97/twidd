@@ -146,7 +146,7 @@ const Sidebar = () => {
                     onClick={() => setIsOpen("tweet")}
                     className='text-zinc-100 bg-[#1D9BF0] hover:bg-[#1A8CD8] transition-all duration-200 p-2 rounded-full font-semibold tracking-wide w-fit md:w-full hidden sm:flex items-center justify-center h-fit mx-auto'
                 >
-                    <p className='hidden md:inline'>Tweet</p>
+                    <p className='hidden md:inline'>Post</p>
                     <PencilIcon className='w-6 h-6 md:hidden' />
                 </button>
             </div>
@@ -198,8 +198,8 @@ const Sidebar = () => {
                                                                     width={42}
                                                                     alt=""
                                                                 />
-                                                                <div>
-                                                                    <h4 className='font-semibold text-zinc-300'>
+                                                                <div className="overflow-hidden">
+                                                                    <h4 className='font-semibold text-zinc-300 truncate'>
                                                                         {result?.name}
                                                                     </h4>
                                                                     <p className='text-gray-400 text-xs'>

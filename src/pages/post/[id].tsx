@@ -75,7 +75,7 @@ const PostPage = ({ providers }: any) => {
                         >
                             <ArrowLeftIcon className="h-5 w-5 text-white" />
                         </div>
-                        Tweet
+                        Post
                     </div>
 
                     <Post

@@ -29,7 +29,7 @@ const Footer = () => {
                 </a>
                 <a
                     className="hover:bg-embed rounded-full flex items-center justify-center h-12 w-12"
-                    href="https://github.com/andrepp97/tweetme"
+                    href="https://github.com/andrepp97/twidd"
                     rel="noopener noreferrer"
                     target="_blank"
                 >
