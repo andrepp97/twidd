@@ -43,7 +43,12 @@ const PostActions = (props: ActionsProps) => {
                 onClick={e => onClickComment(e)}
                 className="flex items-center space-x-1 group"
             >
-                <div className="group iconButton">
+                <div
+                    title="Reply"
+                    data-te-toggle="tooltip"
+                    data-te-placement="bottom"
+                    className="group iconButton"
+                >
                     <ChatIcon className="icon group-hover:text-blue-400" />
                 </div>
                 {(comments.length > 0 && !postPage) && (
@@ -61,15 +66,23 @@ const PostActions = (props: ActionsProps) => {
                     session.user.uid == id
                         ? (
                             <div
-                                onClick={e => deletePost(e)}
+                                title="Delete"
+                                data-te-toggle="tooltip"
+                                data-te-placement="bottom"
                                 className="group iconButton"
+                                onClick={e => deletePost(e)}
                             >
                                 <TrashIcon className="icon text-red-500 group-hover:text-red-600" />
                             </div>
                         )
                         : (
-                            <div className="group iconButton">
-                                <SwitchHorizontalIcon className="icon" />
+                            <div
+                                title="Retweet"
+                                data-te-toggle="tooltip"
+                                data-te-placement="bottom"
+                                className="group iconButton"
+                            >
+                                <SwitchHorizontalIcon className="icon group-hover:text-green-500" />
                             </div>
                         )
                 }
@@ -79,12 +92,24 @@ const PostActions = (props: ActionsProps) => {
                 {
                     liked
                         ? (
-                            <div onClick={e => likePost(e)} className="group iconButton text-pink-600">
+                            <div
+                                title="Unlike"
+                                data-te-toggle="tooltip"
+                                data-te-placement="bottom"
+                                onClick={e => likePost(e)}
+                                className="group iconButton text-pink-600"
+                            >
                                 <HeartSolidIcon className="icon group-hover:text-pink-600" />
                             </div>
                         )
                         : (
-                            <div onClick={e => likePost(e)} className="group iconButton">
+                            <div
+                                title="Like"
+                                data-te-toggle="tooltip"
+                                data-te-placement="bottom"
+                                onClick={e => likePost(e)}
+                                className="group iconButton"
+                            >
                                 <HeartOutlineIcon className="icon group-hover:text-pink-600" />
                             </div>
                         )
@@ -97,8 +122,11 @@ const PostActions = (props: ActionsProps) => {
             </div>
 
             <div
-                onClick={e => sharePost(e)}
+                title="Share"
+                data-te-toggle="tooltip"
+                data-te-placement="bottom"
                 className="group iconButton"
+                onClick={e => sharePost(e)}
             >
                 <ShareIcon className="icon" />
             </div>
