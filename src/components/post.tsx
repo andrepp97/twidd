@@ -249,14 +249,14 @@ const Post = ({ id, post, postPage }: PostProps) => {
                     <div className="flex items-center border-y border-gray-700 text-sm py-2">
                         <Moment
                             date={post?.timestamp.toDate()}
-                            className="text-gray-500"
-                            format="MMM DD, YYYY"
+                            className="text-gray-400"
+                            format="HH:mm · DD MMM YYYY"
                         />
-                        <span className="text-gray-300 mx-2">·</span>
+                        <div className="border-l border-gray-400 h-full mx-3" />
                         <p className="text-zinc-300">
-                            <b>{comments.length}</b> Comments
+                            <b>{comments.length}</b> Replies
                         </p>
-                        <span className="text-gray-300 mx-2">·</span>
+                        <div className="text-gray-300 border mx-2" />
                         <p
                             onClick={() => setIsOpen('likes')}
                             className="text-zinc-300 cursor-pointer hover:underline"
@@ -308,7 +308,7 @@ const Post = ({ id, post, postPage }: PostProps) => {
                         <div className="flex flex-col gap-y-2">
                             {likes.map(like => (
                                 <Link
-                                    key={like.uid}
+                                    key={like.id}
                                     passHref={true}
                                     onClick={() => setIsOpen('')}
                                     href={"/profile/" + like?.id}
