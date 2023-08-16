@@ -18,6 +18,9 @@ interface ActionsProps {
     likes: Array<any>
     liked: boolean
     postPage: any
+    reposts: Array<any>
+    reposted: boolean
+    retweetPost: Function
 }
 
 const PostActions = (props: ActionsProps) => {
@@ -33,6 +36,9 @@ const PostActions = (props: ActionsProps) => {
         likes,
         liked,
         postPage,
+        reposts,
+        reposted,
+        retweetPost,
     } = props
 
     // Render
@@ -76,13 +82,37 @@ const PostActions = (props: ActionsProps) => {
                             </div>
                         )
                         : (
-                            <div
-                                title="Retweet"
-                                data-te-toggle="tooltip"
-                                data-te-placement="bottom"
-                                className="group iconButton"
-                            >
-                                <SwitchHorizontalIcon className="icon group-hover:text-green-500" />
+                            <div className="flex items-center space-x-1 group">
+                                {
+                                    reposted
+                                        ? (
+                                            <div
+                                                title="Undo Repost"
+                                                data-te-toggle="tooltip"
+                                                data-te-placement="bottom"
+                                                className="group iconButton"
+                                                onClick={e => retweetPost(e)}
+                                            >
+                                                <SwitchHorizontalIcon className="icon text-green-500 group-hover:text-green-500" />
+                                            </div>
+                                        )
+                                        : (
+                                            <div
+                                                title="Repost"
+                                                data-te-toggle="tooltip"
+                                                data-te-placement="bottom"
+                                                className="group iconButton"
+                                                onClick={e => retweetPost(e)}
+                                            >
+                                                <SwitchHorizontalIcon className="icon group-hover:text-green-500" />
+                                            </div>
+                                        )
+                                }
+                                {(reposts.length > 0 && !postPage) && (
+                                    <p className={`text-sm cursor-pointer group-hover:text-green-500 ${reposted && "text-green-500"}`}>
+                                        {reposts.length}
+                                    </p>
+                                )}
                             </div>
                         )
                 }
@@ -115,7 +145,7 @@ const PostActions = (props: ActionsProps) => {
                         )
                 }
                 {(likes.length > 0 && !postPage) && (
-                    <p className={`text-sm cursor-pointer hover:underline group-hover:text-pink-600 ${liked && "text-pink-600"}`}>
+                    <p className={`text-sm cursor-pointer group-hover:text-pink-600 ${liked && "text-pink-600"}`}>
                         {likes.length}
                     </p>
                 )}

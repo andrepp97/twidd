@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import Link from 'next/link'
 import Image from "next/image"
 import Moment from "react-moment"
@@ -8,10 +8,19 @@ import { useSession } from "next-auth/react"
 import { DotsHorizontalIcon } from "@heroicons/react/outline"
 import { useRecoilState } from "recoil"
 import { modalState, postIdState } from "../atoms/modalAtom"
-import { collection, deleteDoc, doc, onSnapshot, orderBy, query, setDoc } from "firebase/firestore"
+import {
+    doc,
+    query,
+    collection,
+    onSnapshot,
+    deleteDoc,
+    orderBy,
+    setDoc,
+} from "firebase/firestore"
 import { db } from "../lib/firebase"
 import PostActions from "./postActions"
 import SharePost from "./sharePost"
+import ListItem from "./ListItem"
 import Modal from '../components/modal'
 
 const textWithLinks = (txt: string) => {
@@ -64,6 +73,8 @@ const Post = ({ id, post, postPage }: PostProps) => {
     const [comments, setComments] = useState<Array<any>>([])
     const [likes, setLikes] = useState<Array<any>>([])
     const [liked, setLiked] = useState<boolean>(false)
+    const [reposts, setReposts] = useState<Array<any>>([])
+    const [reposted, setReposted] = useState<boolean>(false)
     const [share, setShare] = useState<boolean>(false)
     const [copied, setCopied] = useState<boolean>(false)
 
@@ -89,6 +100,19 @@ const Post = ({ id, post, postPage }: PostProps) => {
             await deleteDoc(doc(db, "posts", id, "likes", session.user.uid))
         } else {
             await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
+                tag: session.user.tag,
+                username: session.user.name,
+                userImg: session.user.image,
+            })
+        }
+    }
+
+    const retweetPost = async (e: { stopPropagation: () => void }) => {
+        e.stopPropagation()
+        if (reposted) {
+            await deleteDoc(doc(db, "posts", id, "reposts", session.user.uid))
+        } else {
+            await setDoc(doc(db, "posts", id, "reposts", session.user.uid), {
                 tag: session.user.tag,
                 username: session.user.name,
                 userImg: session.user.image,
@@ -128,8 +152,21 @@ const Post = ({ id, post, postPage }: PostProps) => {
     }, [db, id])
 
     useEffect(() => {
+        return onSnapshot(collection(db, "posts", id, "reposts"), (snapshot => setReposts(snapshot.docs.map(item => {
+            return {
+                id: item.id,
+                ...item.data(),
+            }
+        }))))
+    }, [db, id])
+
+    useEffect(() => {
         return setLiked(likes.findIndex(like => like.id == session?.user?.uid) !== -1)
     }, [likes])
+
+    useEffect(() => {
+        return setReposted(reposts.findIndex(repost => repost.id == session?.user?.uid) !== -1)
+    }, [reposts])
 
     // Render
     return (
@@ -253,8 +290,11 @@ const Post = ({ id, post, postPage }: PostProps) => {
                             format="HH:mm · DD MMM YYYY"
                         />
                         <div className="border-l border-gray-400 h-full mx-3" />
-                        <p className="text-zinc-300">
-                            <b>{comments.length}</b> Replies
+                        <p
+                            onClick={() => setIsOpen('reposts')}
+                            className="text-zinc-300 cursor-pointer hover:underline"
+                        >
+                            <b>{reposts.length}</b> Reposts
                         </p>
                         <div className="text-gray-300 border mx-2" />
                         <p
@@ -276,6 +316,9 @@ const Post = ({ id, post, postPage }: PostProps) => {
                     likes={likes}
                     liked={liked}
                     postPage={postPage}
+                    reposts={reposts}
+                    reposted={reposted}
+                    retweetPost={retweetPost}
                 />
 
                 {share && (
@@ -299,38 +342,32 @@ const Post = ({ id, post, postPage }: PostProps) => {
                 )}
             </div>
 
-            {isOpen === 'likes' && (
+            {isOpen && (
                 <Modal>
                     <div className="p-4">
                         <p className="text-zinc-300 text-lg font-semibold mb-4">
                             Liked by
                         </p>
                         <div className="flex flex-col gap-y-2">
-                            {likes.map(like => (
-                                <Link
-                                    key={like.id}
-                                    passHref={true}
-                                    onClick={() => setIsOpen('')}
-                                    href={"/profile/" + like?.id}
-                                    className="hover:bg-zinc-700 flex rounded gap-x-2 px-2 py-1"
-                                >
-                                    <Image
-                                        className="rounded-full w-auto"
-                                        src={like?.userImg}
-                                        height={36}
-                                        width={36}
-                                        alt=""
-                                    />
-                                    <div>
-                                        <h4 className='font-semibold text-zinc-300'>
-                                            {like?.username}
-                                        </h4>
-                                        <p className='text-gray-400 text-xs'>
-                                            @{like?.tag}
-                                        </p>
-                                    </div>
-                                </Link>
-                            ))}
+                            {
+                                isOpen === 'likes'
+                                    ? likes.map(like => (
+                                        <ListItem
+                                            key={like.id}
+                                            data={like}
+                                            onClickFunction={() => setIsOpen('')}
+                                        />
+                                    ))
+                                    : isOpen === 'reposts'
+                                        ? reposts.map(repost => (
+                                            <ListItem
+                                                key={repost.id}
+                                                data={repost}
+                                                onClickFunction={() => setIsOpen('')}
+                                            />
+                                        ))
+                                        : null
+                            }
                         </div>
                     </div>
                 </Modal>
