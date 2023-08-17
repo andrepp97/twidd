@@ -356,11 +356,11 @@ const Post = ({ id, post, repost, postPage }: PostProps) => {
                     )}
                 </div>
 
-                {isOpen && (
+                {(isOpen === 'likes' || isOpen === 'reposts') && (
                     <Modal>
                         <div className="p-4">
                             <p className="text-zinc-300 text-lg font-semibold mb-4">
-                                Liked by
+                                {isOpen === 'likes' ? 'Liked by' : 'Reposted by'}
                             </p>
                             <div className="flex flex-col gap-y-2">
                                 {
