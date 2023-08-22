@@ -9,6 +9,7 @@ import {
     query,
     getDocs,
     where,
+    orderBy,
     collection,
     DocumentData,
     collectionGroup,
@@ -45,7 +46,7 @@ const Profile = ({ providers }: any) => {
 
         try {
             const userQuery = query(collection(db, "users"), where("uid", "==", id))
-            const postsQuery = query(collection(db, "posts"), where("id", "==", id))
+            const postsQuery = query(collection(db, "posts"), where("id", "==", id), orderBy("timestamp", "desc"))
             const result = await getDocs(userQuery)
             const postsResult = await getDocs(postsQuery)
             result.forEach((doc) => users.push(doc.data()))
