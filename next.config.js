@@ -1,8 +1,17 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-    reactStrictMode: true,
-    images: {
-        domains: ["lh3.googleusercontent.com",  "firebasestorage.googleapis.com"]
-    },
-    transpilePackages: ['react-tweet'],
+  reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+      },
+    ],
+  },
+  transpilePackages: ['react-tweet'],
 }
